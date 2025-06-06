@@ -1,0 +1,35 @@
+import React from "react";
+import { createBrowserRouter } from "react-router";
+import Mainlayout from "../Layouts/Mainlayout";
+import Home from "../pages/Home";
+import login from "../pages/login";
+import signup from "../pages/signup";
+import AddBlog from "../pages/AddBlog";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: Mainlayout,
+    children: [
+      {
+        index: true,
+        path: "/",
+        Component: Home,
+      },
+      {
+        path: "/login",
+        Component: login,
+      },
+      {
+        path: "/signup",
+        Component: signup,
+      },
+      {
+        path: "/addBlog",
+        Component: AddBlog,
+      },
+    ],
+  },
+]);
+
+export default router;
