@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Blogs",
-        loader: () => fetch("http://localhost:3000/allblogs"),
+        // loader: () => fetch("http://localhost:3000/allblogs"),
         Component: AllBlogs,
       },
     ],
