@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import login from "../pages/login";
 import signup from "../pages/signup";
 import AddBlog from "../pages/AddBlog";
+import AllBlogs from "../pages/AllBlogs";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
       {
         path: "/addBlog",
         Component: AddBlog,
+      },
+      {
+        path: "/Blogs",
+        loader: () => fetch("http://localhost:3000/allblogs"),
+        Component: AllBlogs,
       },
     ],
   },

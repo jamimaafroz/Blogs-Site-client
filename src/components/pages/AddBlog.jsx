@@ -1,23 +1,42 @@
-import React, { useState } from "react";
-
+import React, { useContext } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { AuthContext } from "../Contexts/AuthContext";
 const AddBlog = () => {
-  const [blogData, setBlogData] = useState({
-    title: "",
-    image: "",
-    category: "",
-    shortDesc: "",
-    longDesc: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setBlogData((prev) => ({ ...prev, [name]: value }));
-  };
+  const { user } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Blog submitted:", blogData);
-    // Optional: Reset form or send data to backend
+    const form = e.target;
+    const formData = new FormData(form);
+    const blogData = Object.fromEntries(formData.entries());
+
+    // Include user email and username in the blog data
+    blogData.email = user?.email || "";
+    blogData.username = user?.displayName || "";
+
+    axios
+      .post("http://localhost:3000/blog", blogData)
+      .then((res) => {
+        if (res.data.insertedId || res.data.acknowledged) {
+          Swal.fire({
+            title: "Success!",
+            text: "Blog added successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          form.reset();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to add blog.",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      });
   };
 
   return (
@@ -27,38 +46,35 @@ const AddBlog = () => {
           Submit a New Blog
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Title */}
           <div>
             <label className="block text-[#780116] mb-1">Title</label>
             <input
               type="text"
               name="title"
-              value={blogData.title}
-              onChange={handleChange}
               className="input input-bordered w-full"
               placeholder="Enter blog title"
               required
             />
           </div>
 
+          {/* Image URL */}
           <div>
             <label className="block text-[#780116] mb-1">Image URL</label>
             <input
               type="text"
               name="image"
-              value={blogData.image}
-              onChange={handleChange}
               className="input input-bordered w-full"
               placeholder="Enter image URL"
               required
             />
           </div>
 
+          {/* Category */}
           <div>
             <label className="block text-[#780116] mb-1">Category</label>
             <select
               name="category"
-              value={blogData.category}
-              onChange={handleChange}
               className="select select-bordered w-full"
               required
             >
@@ -71,34 +87,33 @@ const AddBlog = () => {
             </select>
           </div>
 
+          {/* Short Description */}
           <div>
             <label className="block text-[#780116] mb-1">
               Short Description
             </label>
             <textarea
               name="shortDesc"
-              value={blogData.shortDesc}
-              onChange={handleChange}
               className="textarea textarea-bordered w-full"
               placeholder="Short summary of your blog"
               required
             />
           </div>
 
+          {/* Long Description */}
           <div>
             <label className="block text-[#780116] mb-1">
               Long Description
             </label>
             <textarea
               name="longDesc"
-              value={blogData.longDesc}
-              onChange={handleChange}
               className="textarea textarea-bordered w-full h-40"
               placeholder="Full content of your blog"
               required
             />
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="btn w-full mt-2 bg-[#c32f27] text-[#f7b538] hover:bg-[#d8572a] border-none"
