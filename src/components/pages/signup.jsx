@@ -30,7 +30,7 @@ const Signup = () => {
       validationErrors.push(
         "Password must include at least one capital letter."
       );
-    if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password))
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password))
       validationErrors.push(
         "Password must include at least one special character."
       );
