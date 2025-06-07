@@ -27,10 +27,11 @@ const Navbar = () => {
 
   const links = [
     { to: "/", label: "Home" },
-    { to: "/addBlog", label: "Add Blog" },
+    // Only show Add Blog if user is authenticated
+    ...(user ? [{ to: "/addBlog", label: "Add Blog" }] : []),
     { to: "/Blogs", label: "All Blogs" },
     { to: "/Features", label: "Featured Blogs" },
-    { to: "/wishList", label: "Wishlist" },
+    ...(user ? [{ to: "/wishList", label: "Wishlist" }] : []),
   ];
 
   return (

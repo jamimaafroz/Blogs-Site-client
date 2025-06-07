@@ -6,6 +6,7 @@ import login from "../pages/login";
 import signup from "../pages/signup";
 import AddBlog from "../pages/AddBlog";
 import AllBlogs from "../pages/AllBlogs";
+import PrivateRoutes from "./PrivateRoutes";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/addBlog",
-        Component: AddBlog,
+        element: (
+          <PrivateRoutes>
+            <AddBlog></AddBlog>
+          </PrivateRoutes>
+        ),
       },
       {
         path: "/Blogs",

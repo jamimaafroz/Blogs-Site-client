@@ -1,9 +1,10 @@
-import React, { use } from "react";
-import { AuthContext } from "../Context/AuthCOntext";
+import React, { useContext } from "react";
+
 import { Navigate } from "react-router";
+import { AuthContext } from "../Contexts/AuthContext";
 
 const PrivateRoutes = ({ children }) => {
-  const { user, loading } = use(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
   if (loading) {
     return (
