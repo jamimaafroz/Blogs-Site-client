@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const AllBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -7,6 +8,7 @@ const AllBlogs = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [wishlist, setWishlist] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -48,9 +50,7 @@ const AllBlogs = () => {
   };
 
   const handleViewDetails = (blogId) => {
-    // Navigate to the blog details page
-    // For example: navigate(`/blogs/${blogId}`);
-    console.log(`Viewing details for blog ID: ${blogId}`);
+    navigate(`/viewdetails/${blogId}`);
   };
 
   return (
@@ -103,8 +103,8 @@ const AllBlogs = () => {
                     : "Add to Wishlist"}
                 </button>
                 <button
+                  className=" btn text-blue-500 hover:underline"
                   onClick={() => handleViewDetails(blog._id)}
-                  className="btn text-blue-500 hover:underline"
                 >
                   View Details
                 </button>
