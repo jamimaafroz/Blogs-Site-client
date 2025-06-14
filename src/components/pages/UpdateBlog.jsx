@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { useNavigate, useParams } from "react-router";
+import Swal from "sweetalert2";
 
 const UpdateBlog = () => {
   const { id } = useParams();
@@ -19,16 +20,15 @@ const UpdateBlog = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Fetch blog data for pre-fill
     axios
       .get(`http://localhost:3000/allBlogs/${id}`)
       .then((res) => {
-        // Check ownership before allowing update
         if (res.data.email !== user.email) {
           setError("You are not authorized to update this blog.");
           setLoading(false);
           return;
         }
+
         setBlogData({
           title: res.data.title || "",
           category: res.data.category || "",
@@ -37,8 +37,7 @@ const UpdateBlog = () => {
         });
         setLoading(false);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         setError("Failed to load blog data.");
         setLoading(false);
       });
@@ -52,18 +51,27 @@ const UpdateBlog = () => {
     e.preventDefault();
     setError("");
 
-    // Basic validation (you can expand this)
     if (!blogData.title.trim() || !blogData.longDesc.trim()) {
       setError("Title and Description are required.");
       return;
     }
 
-    // Send update request
     axios
       .put(`http://localhost:3000/blogs/${id}`, blogData)
-      .then(() => {
-        alert("Blog updated successfully!");
-        navigate(`/details/${id}`);
+      .then((response) => {
+        const data = response.data;
+        if (data.modifiedCount > 0) {
+          Swal.fire({
+            icon: "success",
+            title: "Task Updated!",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            navigate("/Blogs");
+          });
+        } else {
+          setError("No changes were made.");
+        }
       })
       .catch(() => {
         setError("Failed to update blog.");

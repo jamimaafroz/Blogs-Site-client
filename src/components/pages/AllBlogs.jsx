@@ -70,9 +70,12 @@ const AllBlogs = () => {
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="p-2 border border-gray-300 rounded"
         >
-          <option value="">All Categories</option>
+          <option value="">All Categoroies</option>
           <option value="Technology">Technology</option>
+          <option value="Travel">Travel</option>
           <option value="Education">Education</option>
+          <option value="Health">Health</option>
+          <option value="Lifestyle">Lifestyle</option>
         </select>
       </div>
 
