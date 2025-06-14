@@ -9,6 +9,7 @@ import AllBlogs from "../pages/AllBlogs";
 import PrivateRoutes from "./PrivateRoutes";
 import ViewDetails from "../pages/ViewDetails";
 import UpdateBlog from "../pages/UpdateBlog";
+import TopBlogs from "../pages/TopBlogs";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
             <UpdateBlog></UpdateBlog>
           </PrivateRoutes>
         ),
+      },
+      {
+        path: "/Features",
+        Component: TopBlogs,
       },
     ],
   },
