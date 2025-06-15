@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { FaSearch } from "react-icons/fa";
 import { AuthContext } from "../Contexts/AuthContext";
+import Swal from "sweetalert2";
 
 const AllBlogs = () => {
   const { user } = useContext(AuthContext);
@@ -56,7 +57,11 @@ const AllBlogs = () => {
 
   const handleWishlistToggle = async (blog) => {
     if (!user || !user.email) {
-      alert("You must be logged in to use the wishlist.");
+      Swal.fire({
+        icon: "warning",
+        title: "Not logged in",
+        text: "You must be logged in to use the wishlist.",
+      });
       return;
     }
 
@@ -65,30 +70,66 @@ const AllBlogs = () => {
 
     try {
       if (existing) {
-        await axios.delete(`http://localhost:3000/wishlist/${existing._id}`);
+        // Optimistically remove from wishlist state immediately
         setWishlist((prev) => prev.filter((item) => item.blogId !== blogId));
+
+        // Show Swal message immediately after click
+        Swal.fire({
+          icon: "success",
+          title: "Removed!",
+          text: `"${blog.title}" removed from your wishlist.`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        // Then delete from backend
+        await axios.delete(`http://localhost:3000/wishlist/${existing._id}`);
       } else {
+        // Generate a temporary id for the new wishlist item to update UI immediately
+        const tempId = Math.random().toString(36).substring(2, 9);
+        const newWish = {
+          _id: tempId,
+          blogId,
+          userEmail: user.email,
+          blogData: blog,
+        };
+
+        // Optimistically add to wishlist state immediately
+        setWishlist((prev) => [...prev, newWish]);
+
+        // Show Swal message immediately after click
+        Swal.fire({
+          icon: "success",
+          title: "Added!",
+          text: `"${blog.title}" added to your wishlist.`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        // Call backend to add wishlist item
         const res = await axios.post("http://localhost:3000/wishlist", {
           blogId,
           userEmail: user.email,
           blogData: blog,
         });
 
+        // Replace temporary id with real id from backend
         if (res.data.insertedId) {
-          setWishlist((prev) => [
-            ...prev,
-            {
-              _id: res.data.insertedId,
-              blogId,
-              userEmail: user.email,
-              blogData: blog,
-            },
-          ]);
+          setWishlist((prev) =>
+            prev.map((item) =>
+              item._id === tempId ? { ...item, _id: res.data.insertedId } : item
+            )
+          );
         }
       }
     } catch (err) {
       console.error("Error updating wishlist:", err);
-      alert("Could not update wishlist.");
+      Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        text: "Could not update wishlist. Please try again.",
+      });
+      // Optionally revert optimistic UI changes here if needed
     }
   };
 
