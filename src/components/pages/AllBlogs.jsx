@@ -17,18 +17,18 @@ const AllBlogs = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || !user.email) return;
-
     const fetchData = async () => {
       try {
-        const [blogRes, wishlistRes] = await Promise.all([
-          axios.get("http://localhost:3000/allBlogs"),
-          axios.get(`http://localhost:3000/wishlist/${user.email}`),
-        ]);
-
+        const blogRes = await axios.get("http://localhost:3000/allBlogs");
         setBlogs(blogRes.data);
         setFilteredBlogs(blogRes.data);
-        setWishlist(wishlistRes.data);
+
+        if (user && user.email) {
+          const wishlistRes = await axios.get(
+            `http://localhost:3000/wishlist/${user.email}`
+          );
+          setWishlist(wishlistRes.data);
+        }
       } catch (err) {
         console.error("Error loading blogs or wishlist:", err);
       } finally {
@@ -70,10 +70,8 @@ const AllBlogs = () => {
 
     try {
       if (existing) {
-        // Optimistically remove from wishlist state immediately
         setWishlist((prev) => prev.filter((item) => item.blogId !== blogId));
 
-        // Show Swal message immediately after click
         Swal.fire({
           icon: "success",
           title: "Removed!",
@@ -82,10 +80,8 @@ const AllBlogs = () => {
           showConfirmButton: false,
         });
 
-        // Then delete from backend
         await axios.delete(`http://localhost:3000/wishlist/${existing._id}`);
       } else {
-        // Generate a temporary id for the new wishlist item to update UI immediately
         const tempId = Math.random().toString(36).substring(2, 9);
         const newWish = {
           _id: tempId,
@@ -94,10 +90,8 @@ const AllBlogs = () => {
           blogData: blog,
         };
 
-        // Optimistically add to wishlist state immediately
         setWishlist((prev) => [...prev, newWish]);
 
-        // Show Swal message immediately after click
         Swal.fire({
           icon: "success",
           title: "Added!",
@@ -106,14 +100,12 @@ const AllBlogs = () => {
           showConfirmButton: false,
         });
 
-        // Call backend to add wishlist item
         const res = await axios.post("http://localhost:3000/wishlist", {
           blogId,
           userEmail: user.email,
           blogData: blog,
         });
 
-        // Replace temporary id with real id from backend
         if (res.data.insertedId) {
           setWishlist((prev) =>
             prev.map((item) =>
@@ -129,7 +121,6 @@ const AllBlogs = () => {
         title: "Oops!",
         text: "Could not update wishlist. Please try again.",
       });
-      // Optionally revert optimistic UI changes here if needed
     }
   };
 
@@ -204,14 +195,22 @@ const AllBlogs = () => {
                   Category: {blog.category}
                 </p>
                 <div className="mt-4 flex justify-between items-center">
-                  <button
-                    onClick={() => handleWishlistToggle(blog)}
-                    className={`btn text-blue-500 hover:underline ${
-                      isWishlisted ? "text-red-500" : ""
-                    }`}
-                  >
-                    {isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
-                  </button>
+                  {!user ? (
+                    <p className="text-gray-400 text-sm">
+                      Sign in to use wishlist
+                    </p>
+                  ) : (
+                    <button
+                      onClick={() => handleWishlistToggle(blog)}
+                      className={`btn text-blue-500 hover:underline ${
+                        isWishlisted ? "text-red-500" : ""
+                      }`}
+                    >
+                      {isWishlisted
+                        ? "Remove from Wishlist"
+                        : "Add to Wishlist"}
+                    </button>
+                  )}
                   <button
                     className="btn text-blue-500 hover:underline"
                     onClick={() => handleViewDetails(blog._id)}
