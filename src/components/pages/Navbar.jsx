@@ -4,6 +4,7 @@ import { FiAlignJustify } from "react-icons/fi";
 import { Link } from "react-router";
 import { AuthContext } from "../Contexts/AuthContext";
 import Swal from "sweetalert2";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const { user, SignOutUser } = useContext(AuthContext);
@@ -27,7 +28,6 @@ const Navbar = () => {
 
   const links = [
     { to: "/", label: "Home" },
-    // Only show Add Blog if user is authenticated
     ...(user ? [{ to: "/addBlog", label: "Add Blog" }] : []),
     { to: "/Blogs", label: "All Blogs" },
     { to: "/Features", label: "Featured Blogs" },
@@ -35,107 +35,127 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="navbar shadow-sm px-4 bg-base-100">
-      {/* Navbar Start */}
-      <div className="navbar-start flex items-center gap-2">
-        <div className="dropdown">
-          <label
-            tabIndex={0}
-            className="btn btn-ghost lg:hidden p-2 text-[#780116]"
-          >
-            <FiAlignJustify size={24} />
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-[#f7b538] rounded-box z-10 mt-3 w-52 p-2 shadow-lg"
-          >
-            {links.map((item) => (
-              <li key={item.to}>
-                <Link
-                  to={item.to}
-                  className="text-[#780116] hover:text-[#d8572a] font-semibold"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <AiOutlineAliwangwang className="text-3xl text-[#780116]" />
-
-        <Link
-          to="/"
-          className="text-3xl font-bold text-[#780116] hover:text-[#c32f27] ml-2"
-          aria-label="Web-Blog Home"
-        >
-          Web-Blog
-        </Link>
-      </div>
-
-      {/* Navbar Center */}
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal gap-6 px-1">
-          {links.map((item) => (
-            <li key={item.to}>
-              <Link
-                to={item.to}
-                className="text-[#780116] hover:text-[#d8572a] font-semibold"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Navbar End */}
-      <div className="navbar-end flex items-center gap-3">
-        {!user ? (
-          <>
-            <Link
-              to="/login"
-              className="btn bg-[#c32f27] text-white hover:bg-[#d8572a] border-none"
+    <nav className="bg-white shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Left: Logo + Hamburger */}
+        <div className="flex items-center gap-3">
+          {/* Mobile dropdown */}
+          <div className="lg:hidden dropdown">
+            <label
+              tabIndex={0}
+              className="btn btn-ghost p-2 text-[#780116] hover:text-[#d8572a]"
             >
-              Log In
-            </Link>
-            <Link
-              to="/signup"
-              className="btn bg-[#c32f27] text-white hover:bg-[#d8572a] border-none"
-            >
-              Sign Up
-            </Link>
-          </>
-        ) : (
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  src={user.photoURL || "https://ui-avatars.com/api/?name=User"}
-                  alt="User Avatar"
-                />
-              </div>
+              <FiAlignJustify size={28} />
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
+              className="dropdown-content menu menu-sm bg-[#f7b538] rounded-lg mt-3 w-52 p-3 shadow-lg border border-[#d8572a]"
             >
-              <li>
-                <Link to="/" className="justify-between">
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <Link to="/">Settings</Link>
-              </li>
-              <li>
-                <button onClick={handleSignOut}>Logout</button>
-              </li>
+              {links.map(({ to, label }) => (
+                <li key={to} className="mb-1 last:mb-0">
+                  <Link
+                    to={to}
+                    className="block px-3 py-2 rounded font-semibold text-[#780116] hover:bg-[#d8572a] hover:text-white transition"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-        )}
+
+          {/* Logo icon */}
+          <AiOutlineAliwangwang className="text-4xl text-[#780116]" />
+          <Link
+            to="/"
+            className="text-3xl font-extrabold text-[#780116] hover:text-[#c32f27] transition"
+            aria-label="Web-Blog Home"
+          >
+            Web-Blog
+          </Link>
+        </div>
+
+        {/* Center: Desktop menu */}
+        <ul className="hidden lg:flex gap-10 font-semibold text-[#780116]">
+          {links.map(({ to, label }) => (
+            <motion.li
+              key={to}
+              whileHover={{ scale: 1.1, color: "#d8572a" }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <Link
+                to={to}
+                className="px-2 py-1 rounded-md hover:bg-[#f7b538] transition"
+              >
+                {label}
+              </Link>
+            </motion.li>
+          ))}
+        </ul>
+
+        {/* Right: Auth buttons or user avatar */}
+        <div className="flex items-center gap-4">
+          {!user ? (
+            <>
+              <Link
+                to="/login"
+                className="btn bg-[#c32f27] px-5 py-2 rounded-md text-white font-semibold shadow-md hover:bg-[#d8572a] transition"
+              >
+                Log In
+              </Link>
+              <Link
+                to="/signup"
+                className="btn bg-[#c32f27] px-5 py-2 rounded-md text-white font-semibold shadow-md hover:bg-[#d8572a] transition"
+              >
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <div className="dropdown dropdown-end relative">
+              <label
+                tabIndex={0}
+                className="btn btn-ghost btn-circle avatar border-2 border-[#d8572a] hover:border-[#780116] transition rounded-full overflow-hidden"
+              >
+                <img
+                  src={user.photoURL || "https://ui-avatars.com/api/?name=User"}
+                  alt="User Avatar"
+                  className="w-10 h-10 object-cover"
+                />
+              </label>
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content bg-white rounded-lg shadow-lg mt-3 w-56 p-3 border border-[#d8572a]"
+              >
+                <li>
+                  <Link
+                    to="/profile"
+                    className="px-3 py-2 rounded hover:bg-[#f7b538] text-[#780116] font-semibold"
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/settings"
+                    className="px-3 py-2 rounded hover:bg-[#f7b538] text-[#780116] font-semibold"
+                  >
+                    Settings
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left px-3 py-2 rounded hover:bg-[#f7b538] text-[#780116] font-semibold"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
