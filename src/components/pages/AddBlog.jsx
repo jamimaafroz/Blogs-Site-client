@@ -6,38 +6,43 @@ import { AuthContext } from "../Contexts/AuthContext";
 const AddBlog = () => {
   const { user } = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const blogData = Object.fromEntries(formData.entries());
 
-    // Include user email and username in the blog data
     blogData.email = user?.email || "";
     blogData.username = user?.displayName || "";
 
-    axios
-      .post("http://localhost:3000/blog", blogData)
-      .then((res) => {
-        if (res.data.insertedId || res.data.acknowledged) {
-          Swal.fire({
-            title: "Success!",
-            text: "Blog added successfully.",
-            icon: "success",
-            confirmButtonText: "OK",
-          });
-          form.reset();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        Swal.fire({
-          title: "Error!",
-          text: "Failed to add blog.",
-          icon: "error",
-          confirmButtonText: "Try Again",
-        });
+    try {
+      const token = await user.getIdToken();
+      console.log("Access Token (frontend):", token); // ✅ ensures token is fresh
+
+      const res = await axios.post("http://localhost:3000/blog", blogData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+      console.log(token);
+      if (res.data.insertedId || res.data.acknowledged) {
+        Swal.fire({
+          title: "Success!",
+          text: "Blog added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        form.reset();
+      }
+    } catch (error) {
+      console.error("Error adding blog:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add blog.",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
   };
 
   return (
