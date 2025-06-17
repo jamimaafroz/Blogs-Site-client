@@ -20,9 +20,19 @@ const UpdateBlog = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`https://blogs-server-indol.vercel.app/allBlogs/${id}`)
-      .then((res) => {
+    const fetchBlog = async () => {
+      try {
+        const token = user && (await user.getIdToken());
+
+        const res = await axios.get(
+          `https://blogs-server-indol.vercel.app/allBlogs/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
         if (res.data.email !== user.email) {
           setError("You are not authorized to update this blog.");
           setLoading(false);
@@ -36,18 +46,22 @@ const UpdateBlog = () => {
           longDesc: res.data.longDesc || "",
         });
         setLoading(false);
-      })
-      .catch(() => {
-        setError("Failed to load blog data.");
+      } catch (error) {
+        setError("Failed to load blog data.", error);
         setLoading(false);
-      });
-  }, [id, user.email]);
+      }
+    };
+
+    if (user && user.email) {
+      fetchBlog();
+    }
+  }, [id, user]);
 
   const handleChange = (e) => {
     setBlogData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -56,26 +70,35 @@ const UpdateBlog = () => {
       return;
     }
 
-    axios
-      .put(`https://blogs-server-indol.vercel.app/blogs/${id}`, blogData)
-      .then((response) => {
-        const data = response.data;
-        if (data.modifiedCount > 0) {
-          Swal.fire({
-            icon: "success",
-            title: "Task Updated!",
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            navigate("/Blogs");
-          });
-        } else {
-          setError("No changes were made.");
+    try {
+      const token = user && (await user.getIdToken());
+
+      const response = await axios.put(
+        `https://blogs-server-indol.vercel.app/blogs/${id}`,
+        blogData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
-      .catch(() => {
-        setError("Failed to update blog.");
-      });
+      );
+
+      const data = response.data;
+      if (data.modifiedCount > 0) {
+        Swal.fire({
+          icon: "success",
+          title: "Task Updated!",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          navigate("/Blogs");
+        });
+      } else {
+        setError("No changes were made.");
+      }
+    } catch {
+      setError("Failed to update blog.");
+    }
   };
 
   if (loading) return <p>Loading blog data...</p>;
