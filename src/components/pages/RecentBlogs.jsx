@@ -20,9 +20,16 @@ const RecentBlogs = () => {
           "https://blogs-server-indol.vercel.app/allBlogs"
         );
         setBlogs(blogRes.data.slice(0, 6)); // Only 6
+
         if (user?.email) {
+          const token = await user.getIdToken(); // ✅ get token
           const wishRes = await axios.get(
-            `https://blogs-server-indol.vercel.app/wishlist/${user.email}`
+            `https://blogs-server-indol.vercel.app/wishlist/${user.email}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // ✅ set header here
+              },
+            }
           );
           setWishlist(wishRes.data);
         }
@@ -54,21 +61,35 @@ const RecentBlogs = () => {
     }
 
     try {
+      const token = await user.getIdToken();
       const res = await axios.post(
         "https://blogs-server-indol.vercel.app/wishlist",
         {
           blogId: blog._id,
           userEmail: user.email,
           blogData: blog,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
-      if (res.data.insertedId) {
+      // ✅ Check the response and show Swal
+      if (res.data.item?._id) {
         setWishlist((prev) => [
           ...prev,
-          { ...blog, blogId: blog._id, _id: res.data.insertedId },
+          { ...blog, blogId: blog._id, _id: res.data.item._id },
         ]);
-        Swal.fire("Added!", `"${blog.title}" added to wishlist.`, "success");
+
+        Swal.fire({
+          title: "Added to Wishlist!",
+          text: `"${blog.title}" has been added.`,
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
       }
     } catch (err) {
       console.error("Wishlist error:", err);

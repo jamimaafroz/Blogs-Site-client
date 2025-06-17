@@ -20,14 +20,16 @@ const AllBlogs = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const blogRes = await axios.get("http://localhost:3000/allBlogs");
+        const blogRes = await axios.get(
+          "https://blogs-server-indol.vercel.app/allBlogs"
+        );
         setBlogs(blogRes.data);
         setFilteredBlogs(blogRes.data);
 
         if (user && user.email) {
           const token = await user.getIdToken(); // ✅ Get Firebase token here
           const wishlistRes = await axios.get(
-            `http://localhost:3000/wishlist/${user.email}`,
+            `https://blogs-server-indol.vercel.app/wishlist/${user.email}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`, // ✅ Send it here
@@ -91,11 +93,14 @@ const AllBlogs = () => {
         });
 
         // DELETE request with Firebase token
-        await axios.delete(`http://localhost:3000/wishlist/${existing._id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.delete(
+          `https://blogs-server-indol.vercel.app/wishlist/${existing._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       } else {
         const tempId = Math.random().toString(36).substring(2, 9);
         const newWish = {
@@ -118,7 +123,7 @@ const AllBlogs = () => {
 
         // POST request with Firebase token
         const res = await axios.post(
-          "http://localhost:3000/wishlist",
+          "https://blogs-server-indol.vercel.app/wishlist",
           {
             blogId,
             userEmail: user.email,

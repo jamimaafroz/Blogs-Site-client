@@ -16,7 +16,7 @@ const TopBlogs = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/allBlogs")
+      .get("https://blogs-server-indol.vercel.app/allBlogs")
       .then((res) => {
         const blogsWithWordCount = res.data.map((blog) => {
           const wordCount = blog.longDesc
