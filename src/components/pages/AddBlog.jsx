@@ -19,11 +19,15 @@ const AddBlog = () => {
       const token = await user.getIdToken();
       console.log("Access Token (frontend):", token); // ✅ ensures token is fresh
 
-      const res = await axios.post("http://localhost:3000/blog", blogData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.post(
+        "https://blogs-server-indol.vercel.app/blog",
+        blogData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(token);
       if (res.data.insertedId || res.data.acknowledged) {
         Swal.fire({

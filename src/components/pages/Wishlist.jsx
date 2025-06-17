@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { FiHeart, FiInfo, FiTrash2 } from "react-icons/fi";
 import axios from "axios";
 import { AuthContext } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router";
@@ -12,14 +13,20 @@ const Wishlist = () => {
 
   useEffect(() => {
     if (!user?.email) {
-      navigate("/login"); // Redirect to login if not logged in
+      navigate("/login");
       return;
     }
 
     const fetchWishlist = async () => {
       try {
+        const token = await user.getIdToken(); // ✅ Get Firebase token
         const res = await axios.get(
-          `http://localhost:3000/wishlist/${user.email}`
+          `https://blogs-server-indol.vercel.app/wishlist/${user.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // ✅ Include in headers
+            },
+          }
         );
         setWishlist(res.data);
       } catch (error) {
@@ -39,8 +46,18 @@ const Wishlist = () => {
 
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/wishlist/${id}`);
+      const token = await user.getIdToken(); // ✅ Get Firebase token
+      await axios.delete(
+        `https://blogs-server-indol.vercel.app/wishlist/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ Include in headers
+          },
+        }
+      );
+
       setWishlist((prev) => prev.filter((item) => item._id !== id));
+
       Swal.fire({
         icon: "success",
         title: "Removed!",
@@ -65,7 +82,7 @@ const Wishlist = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <span className="text-xl text-gray-500">Loading...</span>
+        <div className="loader border-8 border-t-8 border-gray-200 rounded-full h-16 w-16"></div>
       </div>
     );
   }
@@ -79,37 +96,42 @@ const Wishlist = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-center text-[#780116] mb-6">
-        ❤️ My Wishlist
+    <div className="max-w-6xl mx-auto px-6 py-10">
+      <h2 className="flex items-center justify-center text-4xl font-extrabold text-[#780116] mb-10 space-x-3">
+        <FiHeart className="text-red-500" size={36} />
+        <span>My Wishlist</span>
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {wishlist.map(({ _id, blogData, blogId }) => (
           <div
             key={_id}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
+            className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col"
           >
             <img
               src={blogData?.image}
               alt={blogData?.title}
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
             />
-            <div className="p-4">
-              <h3 className="text-lg font-semibold">{blogData?.title}</h3>
+            <div className="p-5 flex flex-col flex-grow">
+              <h3 className="text-xl font-semibold text-[#780116] truncate mb-2">
+                {blogData?.title}
+              </h3>
               <p className="text-sm text-gray-600 mb-2">{blogData?.category}</p>
-              <p className="text-sm text-gray-500">{blogData?.shortDesc}</p>
-              <div className="flex justify-between mt-4">
+              <p className="text-gray-500 flex-grow">{blogData?.shortDesc}</p>
+              <div className="flex justify-between mt-5 gap-3 flex-wrap">
                 <button
                   onClick={() => handleDetails(blogId)}
-                  className="text-blue-500 hover:underline"
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm"
                 >
+                  <FiInfo size={18} />
                   Details
                 </button>
                 <button
                   onClick={() => handleRemove(_id)}
-                  className="text-red-500 hover:underline"
+                  className="flex items-center gap-2 text-red-600 hover:text-red-800 font-medium text-sm"
                 >
+                  <FiTrash2 size={18} />
                   Remove
                 </button>
               </div>

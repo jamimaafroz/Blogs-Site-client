@@ -21,7 +21,7 @@ const UpdateBlog = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/allBlogs/${id}`)
+      .get(`https://blogs-server-indol.vercel.app/allBlogs/${id}`)
       .then((res) => {
         if (res.data.email !== user.email) {
           setError("You are not authorized to update this blog.");
@@ -57,7 +57,7 @@ const UpdateBlog = () => {
     }
 
     axios
-      .put(`http://localhost:3000/blogs/${id}`, blogData)
+      .put(`https://blogs-server-indol.vercel.app/blogs/${id}`, blogData)
       .then((response) => {
         const data = response.data;
         if (data.modifiedCount > 0) {

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { FaSearch } from "react-icons/fa";
+import { motion } from "framer-motion";
 import { AuthContext } from "../Contexts/AuthContext";
 import Swal from "sweetalert2";
 
@@ -24,8 +25,14 @@ const AllBlogs = () => {
         setFilteredBlogs(blogRes.data);
 
         if (user && user.email) {
+          const token = await user.getIdToken(); // ✅ Get Firebase token here
           const wishlistRes = await axios.get(
-            `http://localhost:3000/wishlist/${user.email}`
+            `http://localhost:3000/wishlist/${user.email}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // ✅ Send it here
+              },
+            }
           );
           setWishlist(wishlistRes.data);
         }
@@ -65,11 +72,14 @@ const AllBlogs = () => {
       return;
     }
 
-    const blogId = blog._id;
-    const existing = wishlist.find((item) => item.blogId === blogId);
-
     try {
+      const token = await user.getIdToken(); // ✅ Get Firebase token
+
+      const blogId = blog._id;
+      const existing = wishlist.find((item) => item.blogId === blogId);
+
       if (existing) {
+        // Optimistically remove from UI
         setWishlist((prev) => prev.filter((item) => item.blogId !== blogId));
 
         Swal.fire({
@@ -80,7 +90,12 @@ const AllBlogs = () => {
           showConfirmButton: false,
         });
 
-        await axios.delete(`http://localhost:3000/wishlist/${existing._id}`);
+        // DELETE request with Firebase token
+        await axios.delete(`http://localhost:3000/wishlist/${existing._id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } else {
         const tempId = Math.random().toString(36).substring(2, 9);
         const newWish = {
@@ -90,6 +105,7 @@ const AllBlogs = () => {
           blogData: blog,
         };
 
+        // Optimistically add to UI
         setWishlist((prev) => [...prev, newWish]);
 
         Swal.fire({
@@ -100,11 +116,20 @@ const AllBlogs = () => {
           showConfirmButton: false,
         });
 
-        const res = await axios.post("http://localhost:3000/wishlist", {
-          blogId,
-          userEmail: user.email,
-          blogData: blog,
-        });
+        // POST request with Firebase token
+        const res = await axios.post(
+          "http://localhost:3000/wishlist",
+          {
+            blogId,
+            userEmail: user.email,
+            blogData: blog,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (res.data.insertedId) {
           setWishlist((prev) =>
@@ -137,24 +162,24 @@ const AllBlogs = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl text-[#780116] font-bold text-center mb-6">
+    <div className="container mx-auto p-6">
+      <h1 className="text-4xl text-[#780116] font-extrabold text-center mb-8 tracking-wide">
         All Blogs
       </h1>
 
       {/* Search & Filter */}
-      <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+      <div className="flex flex-col md:flex-row justify-center items-center gap-5 mb-10">
         <input
           type="text"
           placeholder="Search blogs by title"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border border-gray-300 rounded w-64"
+          className="p-3 border border-gray-300 rounded-lg w-72 focus:outline-none focus:ring-2 focus:ring-[#780116]"
         />
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="p-2 border border-gray-300 rounded w-48"
+          className="p-3 border border-gray-300 rounded-lg w-56 focus:outline-none focus:ring-2 focus:ring-[#780116]"
         >
           <option value="">All Categories</option>
           <option value="Technology">Technology</option>
@@ -165,45 +190,51 @@ const AllBlogs = () => {
         </select>
         <button
           onClick={handleSearch}
-          className="bg-[#d8572a] text-white p-2 rounded hover:bg-[#780116]"
+          className="bg-[#d8572a] text-white p-3 rounded-lg hover:bg-[#780116] transition"
+          aria-label="Search blogs"
         >
-          <FaSearch />
+          <FaSearch size={18} />
         </button>
       </div>
 
       {/* Blog Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredBlogs.map((blog) => {
           const isWishlisted = wishlist.some(
             (item) => item.blogId === blog._id
           );
 
           return (
-            <div
+            <motion.div
               key={blog._id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden"
+              whileHover={{ scale: 1.03 }}
+              className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer flex flex-col"
             >
               <img
                 src={blog.image}
                 alt={blog.title}
-                className="w-full h-48 object-cover"
+                className="w-full h-48 object-cover transition-transform duration-300"
               />
-              <div className="p-4">
-                <h2 className="text-xl font-semibold">{blog.title}</h2>
-                <p className="text-gray-600">{blog.shortDesc}</p>
-                <p className="text-sm text-gray-500">
+              <div className="p-5 flex flex-col flex-grow">
+                <h2 className="text-2xl font-semibold mb-2 text-[#780116] truncate">
+                  {blog.title}
+                </h2>
+                <p className="text-gray-700 flex-grow">{blog.shortDesc}</p>
+                <p className="text-sm text-gray-500 mt-3 mb-4">
                   Category: {blog.category}
                 </p>
-                <div className="mt-4 flex justify-between items-center">
+                <div className="flex justify-between items-center gap-3 flex-wrap">
                   {!user ? (
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-gray-400 text-sm italic">
                       Sign in to use wishlist
                     </p>
                   ) : (
                     <button
                       onClick={() => handleWishlistToggle(blog)}
-                      className={`btn text-blue-500 hover:underline ${
-                        isWishlisted ? "text-red-500" : ""
+                      className={`text-sm font-medium px-3 py-1 rounded-lg border transition ${
+                        isWishlisted
+                          ? "border-red-500 text-red-500 hover:bg-red-50"
+                          : "border-blue-500 text-blue-500 hover:bg-blue-50"
                       }`}
                     >
                       {isWishlisted
@@ -211,15 +242,16 @@ const AllBlogs = () => {
                         : "Add to Wishlist"}
                     </button>
                   )}
+
                   <button
-                    className="btn text-blue-500 hover:underline"
+                    className="text-sm font-medium text-[#780116] underline hover:no-underline"
                     onClick={() => handleViewDetails(blog._id)}
                   >
                     View Details
                   </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
