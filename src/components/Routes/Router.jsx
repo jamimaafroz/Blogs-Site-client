@@ -11,6 +11,7 @@ import ViewDetails from "../pages/ViewDetails";
 import UpdateBlog from "../pages/UpdateBlog";
 import TopBlogs from "../pages/TopBlogs";
 import Wishlist from "../pages/Wishlist";
+import ErrorPage from "../pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/*",
+    element: <ErrorPage></ErrorPage>,
   },
 ]);
 
