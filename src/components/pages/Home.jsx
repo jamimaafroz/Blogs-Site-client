@@ -15,7 +15,7 @@ const Home = () => {
   };
 
   return (
-    <div className="space-y-16">
+    <div>
       <Banner />
       <Newsletter />
       <TrendingTags onTagClick={handleTagClick} />

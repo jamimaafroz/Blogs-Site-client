@@ -26,7 +26,7 @@ const ContactSection = () => {
       return;
     }
 
-    // No real submission, just simulate success
+    // Simulate success response
     Swal.fire({
       icon: "success",
       title: "Thank you!",
@@ -88,11 +88,12 @@ const ContactSection = () => {
 
         <motion.form
           onSubmit={handleSubmit}
-          className="max-w-xl mx-auto space-y-6 text-left"
-          initial={{ opacity: 0, y: 40 }}
+          className="max-w-xl mx-auto space-y-6 text-left bg-white p-8 rounded-lg shadow-xl ring-1 ring-gray-200"
+          initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={{ duration: 0.9, delay: 0.6 }}
+          noValidate
         >
           <input
             type="text"
@@ -100,7 +101,8 @@ const ContactSection = () => {
             placeholder="Your Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#d8572a]"
+            className="w-full p-5 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-4 focus:ring-[#d8572a] transition-shadow shadow-sm"
+            aria-required="true"
           />
           <input
             type="email"
@@ -108,23 +110,29 @@ const ContactSection = () => {
             placeholder="Your Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#d8572a]"
+            className="w-full p-5 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-4 focus:ring-[#d8572a] transition-shadow shadow-sm"
+            aria-required="true"
           />
           <textarea
             name="message"
             placeholder="Your Message"
-            rows="5"
+            rows="6"
             value={formData.message}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#d8572a]"
+            className="w-full p-5 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-4 focus:ring-[#d8572a] transition-shadow shadow-sm"
+            aria-required="true"
           />
 
-          <button
+          <motion.button
             type="submit"
-            className="w-full bg-[#d8572a] text-white py-3 rounded font-semibold hover:bg-[#780116] transition-colors"
+            className="w-full bg-[#d8572a] text-white py-4 rounded-md font-semibold shadow-lg hover:bg-[#780116] focus:ring-4 focus:ring-[#780116]/60 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileFocus={{ scale: 1.05, y: -3 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Send Message"
           >
             Send Message
-          </button>
+          </motion.button>
         </motion.form>
       </div>
 
