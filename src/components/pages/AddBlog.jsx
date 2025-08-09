@@ -126,7 +126,7 @@ const AddBlog = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="btn w-full mt-2 bg-[#c32f27] text-[#f7b538] hover:bg-[#d8572a] border-none"
+            className="btn w-full mt-2 bg-[#c32f27] text-[#f7b538]  border-none"
           >
             Submit Blog
           </button>
