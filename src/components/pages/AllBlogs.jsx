@@ -17,29 +17,31 @@ const AllBlogs = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Fetch blogs and wishlist (if user logged in)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const blogRes = await axios.get(
+        const { data: blogData } = await axios.get(
           "https://blogs-server-indol.vercel.app/allBlogs"
         );
-        setBlogs(blogRes.data);
-        setFilteredBlogs(blogRes.data);
+        setBlogs(blogData);
+        setFilteredBlogs(blogData);
 
-        if (user && user.email) {
-          const token = await user.getIdToken(); // ✅ Get Firebase token here
-          const wishlistRes = await axios.get(
+        if (user?.email) {
+          const token = await user.getIdToken();
+          const { data: wishlistData } = await axios.get(
             `https://blogs-server-indol.vercel.app/wishlist/${user.email}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`, // ✅ Send it here
-              },
-            }
+            { headers: { Authorization: `Bearer ${token}` } }
           );
-          setWishlist(wishlistRes.data);
+          setWishlist(wishlistData);
         }
-      } catch (err) {
-        console.error("Error loading blogs or wishlist:", err);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Unable to load blogs or wishlist. Please try again later.",
+        });
       } finally {
         setLoading(false);
       }
@@ -48,14 +50,15 @@ const AllBlogs = () => {
     fetchData();
   }, [user]);
 
+  // Filter blogs by category and search query
   const handleSearch = () => {
-    let result = blogs;
+    let result = [...blogs];
 
     if (selectedCategory) {
       result = result.filter((blog) => blog.category === selectedCategory);
     }
 
-    if (searchQuery) {
+    if (searchQuery.trim()) {
       result = result.filter((blog) =>
         blog.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -64,76 +67,56 @@ const AllBlogs = () => {
     setFilteredBlogs(result);
   };
 
+  // Toggle wishlist add/remove
   const handleWishlistToggle = async (blog) => {
-    if (!user || !user.email) {
-      Swal.fire({
+    if (!user?.email) {
+      return Swal.fire({
         icon: "warning",
-        title: "Not logged in",
-        text: "You must be logged in to use the wishlist.",
+        title: "Login Required",
+        text: "Please log in to manage your wishlist.",
       });
-      return;
     }
 
     try {
-      const token = await user.getIdToken(); // ✅ Get Firebase token
-
-      const blogId = blog._id;
-      const existing = wishlist.find((item) => item.blogId === blogId);
+      const token = await user.getIdToken();
+      const existing = wishlist.find((item) => item.blogId === blog._id);
 
       if (existing) {
-        // Optimistically remove from UI
-        setWishlist((prev) => prev.filter((item) => item.blogId !== blogId));
+        // Optimistic UI update
+        setWishlist((prev) => prev.filter((item) => item.blogId !== blog._id));
+
+        await axios.delete(
+          `https://blogs-server-indol.vercel.app/wishlist/${existing._id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
         Swal.fire({
           icon: "success",
-          title: "Removed!",
-          text: `"${blog.title}" removed from your wishlist.`,
+          title: "Removed from Wishlist",
+          text: `"${blog.title}" has been removed.`,
           timer: 1500,
           showConfirmButton: false,
         });
-
-        // DELETE request with Firebase token
-        await axios.delete(
-          `https://blogs-server-indol.vercel.app/wishlist/${existing._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
       } else {
         const tempId = Math.random().toString(36).substring(2, 9);
         const newWish = {
           _id: tempId,
-          blogId,
+          blogId: blog._id,
           userEmail: user.email,
           blogData: blog,
         };
 
-        // Optimistically add to UI
+        // Optimistic UI update
         setWishlist((prev) => [...prev, newWish]);
 
-        Swal.fire({
-          icon: "success",
-          title: "Added!",
-          text: `"${blog.title}" added to your wishlist.`,
-          timer: 1500,
-          showConfirmButton: false,
-        });
-
-        // POST request with Firebase token
         const res = await axios.post(
           "https://blogs-server-indol.vercel.app/wishlist",
           {
-            blogId,
+            blogId: blog._id,
             userEmail: user.email,
             blogData: blog,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
 
         if (res.data.insertedId) {
@@ -143,32 +126,37 @@ const AllBlogs = () => {
             )
           );
         }
+
+        Swal.fire({
+          icon: "success",
+          title: "Added to Wishlist",
+          text: `"${blog.title}" has been added.`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
       }
-    } catch (err) {
-      console.error("Error updating wishlist:", err);
+    } catch (error) {
+      console.error("Wishlist error:", error);
       Swal.fire({
         icon: "error",
-        title: "Oops!",
-        text: "Could not update wishlist. Please try again.",
+        title: "Error",
+        text: "Failed to update wishlist. Please try again.",
       });
     }
   };
 
-  const handleViewDetails = (id) => {
-    navigate(`/viewdetails/${id}`);
-  };
+  const handleViewDetails = (id) => navigate(`/viewdetails/${id}`);
 
-  if (loading) {
+  if (loading)
     return (
       <div className="flex justify-center items-center h-64">
         <div className="loader border-8 border-t-8 border-gray-200 rounded-full h-16 w-16"></div>
       </div>
     );
-  }
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-4xl text-[#780116] font-extrabold text-center mb-8 tracking-wide">
+      <h1 className="text-4xl font-extrabold text-center mb-8 tracking-wide text-[#780116]">
         All Blogs
       </h1>
 
@@ -176,15 +164,17 @@ const AllBlogs = () => {
       <div className="flex flex-col md:flex-row justify-center items-center gap-5 mb-10">
         <input
           type="text"
+          aria-label="Search blogs by title"
           placeholder="Search blogs by title"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-3 border border-gray-300 rounded-lg w-72 focus:outline-none focus:ring-2 focus:ring-[#780116]"
+          className="w-72 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#780116]"
         />
         <select
+          aria-label="Filter blogs by category"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="p-3 border border-gray-300 rounded-lg w-56 focus:outline-none focus:ring-2 focus:ring-[#780116]"
+          className="w-56 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#780116]"
         >
           <option value="">All Categories</option>
           <option value="Technology">Technology</option>
@@ -195,15 +185,15 @@ const AllBlogs = () => {
         </select>
         <button
           onClick={handleSearch}
-          className="bg-[#d8572a] text-white p-3 rounded-lg hover:bg-[#780116] transition"
           aria-label="Search blogs"
+          className="p-3 bg-[#d8572a] rounded-lg text-white hover:bg-[#780116] transition-colors"
         >
           <FaSearch size={18} />
         </button>
       </div>
 
       {/* Blog Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {filteredBlogs.map((blog) => {
           const isWishlisted = wishlist.some(
             (item) => item.blogId === blog._id
@@ -213,44 +203,47 @@ const AllBlogs = () => {
             <motion.div
               key={blog._id}
               whileHover={{ scale: 1.03 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer flex flex-col"
+              className="flex flex-col bg-white rounded-xl shadow-lg cursor-pointer overflow-hidden"
             >
               <img
                 src={blog.image}
                 alt={blog.title}
-                className="w-full h-48 object-cover transition-transform duration-300"
+                className="w-full h-44 object-cover transition-transform duration-300"
               />
-              <div className="p-5 flex flex-col flex-grow">
-                <h2 className="text-2xl font-semibold mb-2 text-[#780116] truncate">
+              <div className="flex flex-col flex-grow p-5">
+                <h2
+                  className="mb-2 text-2xl font-semibold text-[#780116] truncate"
+                  title={blog.title}
+                >
                   {blog.title}
                 </h2>
-                <p className="text-gray-700 flex-grow">{blog.shortDesc}</p>
-                <p className="text-sm text-gray-500 mt-3 mb-4">
+                <p className="flex-grow text-gray-700">{blog.shortDesc}</p>
+                <p className="mb-4 mt-3 text-sm text-gray-500">
                   Category: {blog.category}
                 </p>
-                <div className="flex justify-between items-center gap-3 flex-wrap">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   {!user ? (
-                    <p className="text-gray-400 text-sm italic">
+                    <p className="italic text-sm text-gray-400">
                       Sign in to use wishlist
                     </p>
                   ) : (
                     <button
                       onClick={() => handleWishlistToggle(blog)}
-                      className={`text-sm font-medium px-3 py-1 rounded-lg border transition ${
+                      className={`px-3 py-1 text-sm font-medium rounded-lg border transition ${
                         isWishlisted
                           ? "border-red-500 text-red-500 hover:bg-red-50"
                           : "border-blue-500 text-blue-500 hover:bg-blue-50"
                       }`}
+                      aria-pressed={isWishlisted}
                     >
                       {isWishlisted
                         ? "Remove from Wishlist"
                         : "Add to Wishlist"}
                     </button>
                   )}
-
                   <button
-                    className="text-sm font-medium text-[#780116] underline hover:no-underline"
                     onClick={() => handleViewDetails(blog._id)}
+                    className="text-sm font-medium text-[#780116] underline hover:no-underline"
                   >
                     View Details
                   </button>
