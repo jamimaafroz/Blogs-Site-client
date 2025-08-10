@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FaSortUp, FaSortDown, FaSort, FaChartBar } from "react-icons/fa";
-
 import axios from "axios";
 import {
   useReactTable,
@@ -41,24 +40,39 @@ const TopBlogs = () => {
         header: "#",
         accessorFn: (_, index) => index + 1,
         id: "index",
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <span className="font-semibold text-gray-600">{info.getValue()}</span>
+        ),
       },
       {
         header: "Title",
         accessorKey: "title",
+        cell: (info) => (
+          <span className="text-gray-800 font-medium">{info.getValue()}</span>
+        ),
       },
       {
         header: "Category",
         accessorKey: "category",
+        cell: (info) => (
+          <span className="text-gray-600">{info.getValue()}</span>
+        ),
       },
       {
         header: "Author Email",
         accessorKey: "email",
-        cell: (info) => info.getValue() || "N/A",
+        cell: (info) => (
+          <span className="text-gray-500">{info.getValue() || "N/A"}</span>
+        ),
       },
       {
         header: "Word Count",
         accessorKey: "wordCount",
+        cell: (info) => (
+          <span className="font-semibold text-[#780116]">
+            {info.getValue()}
+          </span>
+        ),
       },
     ],
     []
@@ -67,9 +81,7 @@ const TopBlogs = () => {
   const table = useReactTable({
     data: blogs,
     columns,
-    state: {
-      sorting,
-    },
+    state: { sorting },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -78,58 +90,74 @@ const TopBlogs = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="loader border-8 border-t-8 border-gray-200 rounded-full h-16 w-16"></div>
+        <div className="w-12 h-12 border-4 border-[#ffd6c2] border-t-[#780116] rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-2xl text-[#780116] font-bold mb-4 text-center flex items-center justify-center gap-2">
-        <FaChartBar className="text-3xl" />
-        Top 10 Blogs by Word Count
-      </h2>
+    <div className="max-w-6xl mx-auto px-6 py-10">
+      {/* Header */}
+      <div className="flex items-center justify-center gap-2 mb-6">
+        <FaChartBar className="text-3xl text-[#780116]" />
+        <h2 className="text-3xl font-bold text-[#780116] text-center">
+          Top 10 Blogs by Word Count
+        </h2>
+      </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300 shadow-md">
-          <thead className="bg-gray-100">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    className="px-4 py-3 border text-[#780116] text-sm font-semibold cursor-pointer select-none hover:bg-gray-200 transition duration-200 text-left"
-                  >
-                    <div className="inline-flex items-center gap-1">
+      {/* Table Container */}
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-gray-50">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                      className="px-6 py-4 border-b text-[#780116] font-semibold cursor-pointer select-none hover:bg-gray-100 transition-colors text-left"
+                    >
+                      <div className="inline-flex items-center gap-1">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: <FaSortUp className="text-xs text-[#780116]" />,
+                          desc: (
+                            <FaSortDown className="text-xs text-[#780116]" />
+                          ),
+                        }[header.column.getIsSorted()] ?? (
+                          <FaSort className="text-xs text-gray-400" />
+                        )}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row, idx) => (
+                <tr
+                  key={row.id}
+                  className={`hover:bg-gray-50 transition-colors ${
+                    idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  }`}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-6 py-3 border-b">
                       {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
+                        cell.column.columnDef.cell,
+                        cell.getContext()
                       )}
-                      {{
-                        asc: <FaSortUp className="text-xs text-[#780116]" />,
-                        desc: <FaSortDown className="text-xs text-[#780116]" />,
-                      }[header.column.getIsSorted()] ?? (
-                        <FaSort className="text-xs text-gray-400" />
-                      )}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="text-center hover:bg-gray-50">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-2 border">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
