@@ -157,17 +157,7 @@ const RecentBlogs = () => {
                   aria-label={`View details of ${blog.title}`}
                 >
                   <FiInfo size={20} />
-                  Details
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  onClick={() => handleAddToWishlist(blog)}
-                  className="flex items-center gap-2 text-red-600 hover:text-red-800 font-semibold focus:outline-none focus:ring-2 focus:ring-red-400 rounded"
-                  aria-label={`Add ${blog.title} to wishlist`}
-                >
-                  <FiHeart size={20} />
-                  Add to Wishlist
+                  show More
                 </motion.button>
               </div>
             </div>

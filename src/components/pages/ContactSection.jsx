@@ -60,7 +60,7 @@ const ContactSection = () => {
             transition={{ duration: 0.7 }}
           >
             <FaMapMarkerAlt className="text-[#d8572a] text-2xl" />
-            <p>123 Blog Street, Writer City, Country</p>
+            <p>123 Blog Street, Dhaka, Bangladesh</p>
           </motion.div>
 
           <motion.div
@@ -71,7 +71,7 @@ const ContactSection = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <FaPhone className="text-[#d8572a] text-2xl" />
-            <p>+123 456 7890</p>
+            <p>+880 199168xx87</p>
           </motion.div>
 
           <motion.div
@@ -82,7 +82,7 @@ const ContactSection = () => {
             transition={{ duration: 0.7, delay: 0.4 }}
           >
             <FaEnvelope className="text-[#d8572a] text-2xl" />
-            <p>contact@yourblog.com</p>
+            <p>jamimaafroz123@gmail.com</p>
           </motion.div>
         </div>
 

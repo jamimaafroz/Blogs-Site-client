@@ -15,7 +15,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen space-y-8 bg-gradient-to-b from-[#fff7f0] to-[#fff1e6]">
       <Banner />
       <Newsletter />
       <TrendingTags onTagClick={handleTagClick} />
