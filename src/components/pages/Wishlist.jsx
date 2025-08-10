@@ -19,13 +19,11 @@ const Wishlist = () => {
 
     const fetchWishlist = async () => {
       try {
-        const token = await user.getIdToken(); // ✅ Get Firebase token
+        const token = await user.getIdToken();
         const res = await axios.get(
           `https://blogs-server-indol.vercel.app/wishlist/${user.email}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`, // ✅ Include in headers
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
         setWishlist(res.data);
@@ -46,18 +44,12 @@ const Wishlist = () => {
 
   const handleRemove = async (id) => {
     try {
-      const token = await user.getIdToken(); // ✅ Get Firebase token
+      const token = await user.getIdToken();
       await axios.delete(
         `https://blogs-server-indol.vercel.app/wishlist/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // ✅ Include in headers
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
       setWishlist((prev) => prev.filter((item) => item._id !== id));
-
       Swal.fire({
         icon: "success",
         title: "Removed!",
@@ -82,64 +74,108 @@ const Wishlist = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="loader border-8 border-t-8 border-gray-200 rounded-full h-16 w-16"></div>
+        <svg
+          className="animate-spin h-12 w-12 text-[#c32f27]"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          aria-label="Loading spinner"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+          />
+        </svg>
       </div>
     );
   }
 
-  if (wishlist.length === 0) {
+  if (!wishlist.length) {
     return (
-      <div className="text-center mt-10 text-gray-600 text-xl">
-        Your wishlist is empty.
+      <div className="text-center mt-16 text-gray-600 text-xl font-medium">
+        Your wishlist is currently empty.
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
-      <h2 className="flex items-center justify-center text-4xl font-extrabold text-[#780116] mb-10 space-x-3">
-        <FiHeart className="text-red-500" size={36} />
-        <span>My Wishlist</span>
-      </h2>
+    <main className="max-w-7xl mx-auto px-6 py-12">
+      <header className="flex flex-col items-center justify-center mb-8 space-y-4 text-center max-w-3xl mx-auto">
+        <div className="flex items-center space-x-3">
+          <FiHeart size={36} className="text-[#c32f27]" aria-hidden="true" />
+          <h1 className="text-4xl font-extrabold text-[#780116]">
+            My Wishlist
+          </h1>
+        </div>
+        <p className="text-gray-700 text-lg">
+          Keep track of your favorite blogs all in one place. Your wishlist lets
+          you easily revisit inspiring posts, discover fresh perspectives, and
+          manage content that matters most to you. Stay organized and never miss
+          out on what sparks your creativity!
+        </p>
+      </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+        aria-label="Wishlist blogs"
+      >
         {wishlist.map(({ _id, blogData, blogId }) => (
-          <div
+          <article
             key={_id}
-            className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col"
+            className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden"
           >
             <img
               src={blogData?.image}
-              alt={blogData?.title}
-              className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+              alt={`Cover image for ${blogData?.title}`}
+              className="w-full h-36 object-cover hover:scale-105 transition-transform duration-300"
+              loading="lazy"
             />
-            <div className="p-5 flex flex-col flex-grow">
-              <h3 className="text-xl font-semibold text-[#780116] truncate mb-2">
+            <div className="p-4 flex flex-col flex-grow">
+              <h2
+                className="text-lg font-semibold text-[#780116] truncate mb-1"
+                title={blogData?.title}
+              >
                 {blogData?.title}
-              </h3>
-              <p className="text-sm text-gray-600 mb-2">{blogData?.category}</p>
-              <p className="text-gray-500 flex-grow">{blogData?.shortDesc}</p>
-              <div className="flex justify-between mt-5 gap-3 flex-wrap">
+              </h2>
+              <p className="text-xs font-medium text-[#c32f27] mb-2">
+                {blogData?.category}
+              </p>
+              <p className="text-gray-600 flex-grow text-sm">
+                {blogData?.shortDesc}
+              </p>
+
+              <div className="mt-4 flex justify-between gap-3 flex-wrap">
                 <button
                   onClick={() => handleDetails(blogId)}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm"
+                  className="flex items-center gap-2 text-[#1D4ED8] hover:text-[#2563EB] font-medium text-xs focus:outline-none focus:ring-2 focus:ring-[#1D4ED8] rounded"
+                  aria-label={`View details of ${blogData?.title}`}
                 >
-                  <FiInfo size={18} />
+                  <FiInfo size={16} />
                   Details
                 </button>
                 <button
                   onClick={() => handleRemove(_id)}
-                  className="flex items-center gap-2 text-red-600 hover:text-red-800 font-medium text-sm"
+                  className="flex items-center gap-2 text-[#dc2626] hover:text-[#b91c1c] font-medium text-xs focus:outline-none focus:ring-2 focus:ring-[#dc2626] rounded"
+                  aria-label={`Remove ${blogData?.title} from wishlist`}
                 >
-                  <FiTrash2 size={18} />
+                  <FiTrash2 size={16} />
                   Remove
                 </button>
               </div>
             </div>
-          </div>
+          </article>
         ))}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 
