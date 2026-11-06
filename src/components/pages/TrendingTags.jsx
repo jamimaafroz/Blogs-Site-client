@@ -20,7 +20,7 @@ const TrendingTags = ({ onTagClick }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <h2 className="text-3xl font-bold text-[#780116] mb-6 text-center">
+      <h2 className="text-3xl font-bold text-[#e3637a] mb-6 text-center">
         Trending Tags
       </h2>
       <div className="flex flex-wrap justify-center gap-4">
@@ -30,7 +30,7 @@ const TrendingTags = ({ onTagClick }) => {
             onClick={() => onTagClick(tag)}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            className="px-4 py-2 bg-[#d8572a] text-white rounded-full shadow-md hover:bg-[#780116] transition"
+            className="px-4 py-2 bg-[#d8572a] text-white rounded-full shadow-md hover:bg-[#e3637a] transition"
             aria-label={`Filter blogs by ${tag}`}
           >
             #{tag}

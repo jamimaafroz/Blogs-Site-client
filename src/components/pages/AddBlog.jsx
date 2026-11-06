@@ -26,7 +26,7 @@ const AddBlog = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       console.log(token);
       if (res.data.insertedId || res.data.acknowledged) {
@@ -52,13 +52,13 @@ const AddBlog = () => {
   return (
     <div className="flex justify-center items-center min-h-screen px-4 my-8">
       <div className="w-full max-w-2xl bg-base-100 shadow-xl p-6 rounded-md">
-        <h2 className="text-2xl font-semibold text-[#780116] mb-4 text-center">
+        <h2 className="text-2xl font-semibold text-[#e3637a] mb-4 text-center">
           Submit a New Blog
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Title */}
           <div>
-            <label className="block text-[#780116] mb-1">Title</label>
+            <label className="block text-[#e3637a] mb-1">Title</label>
             <input
               type="text"
               name="title"
@@ -70,7 +70,7 @@ const AddBlog = () => {
 
           {/* Image URL */}
           <div>
-            <label className="block text-[#780116] mb-1">Image URL</label>
+            <label className="block text-[#e3637a] mb-1">Image URL</label>
             <input
               type="text"
               name="image"
@@ -82,7 +82,7 @@ const AddBlog = () => {
 
           {/* Category */}
           <div>
-            <label className="block text-[#780116] mb-1">Category</label>
+            <label className="block text-[#e3637a] mb-1">Category</label>
             <select
               name="category"
               className="select select-bordered w-full"
@@ -99,7 +99,7 @@ const AddBlog = () => {
 
           {/* Short Description */}
           <div>
-            <label className="block text-[#780116] mb-1">
+            <label className="block text-[#e3637a] mb-1">
               Short Description
             </label>
             <textarea
@@ -112,7 +112,7 @@ const AddBlog = () => {
 
           {/* Long Description */}
           <div>
-            <label className="block text-[#780116] mb-1">
+            <label className="block text-[#e3637a] mb-1">
               Long Description
             </label>
             <textarea
@@ -126,7 +126,7 @@ const AddBlog = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="btn w-full mt-2 bg-[#c32f27] text-[#f7b538]  border-none"
+            className="btn w-full mt-2 bg-[#c32f27] text-[#f7b538] hover:bg-[#d8572a] border-none"
           >
             Submit Blog
           </button>

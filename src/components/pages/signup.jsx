@@ -29,11 +29,11 @@ const Signup = () => {
       validationErrors.push("Password must be at least 6 characters.");
     if (!/[A-Z]/.test(password))
       validationErrors.push(
-        "Password must include at least one uppercase letter."
+        "Password must include at least one uppercase letter.",
       );
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(password))
       validationErrors.push(
-        "Password must include at least one special character."
+        "Password must include at least one special character.",
       );
     if (!/[0-9]/.test(password))
       validationErrors.push("Password must include at least one number.");
@@ -69,12 +69,12 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex justify-center items-center px-4 py-8 bg-white md:bg-transparent">
       <div className="card w-full max-w-md p-6 shadow-lg rounded-2xl bg-base-100 border border-[#f0c987]">
-        <h1 className="text-2xl font-semibold text-center text-[#780116] mb-6">
+        <h1 className="text-2xl font-semibold text-center text-[#e3637a] mb-6">
           Create Your Account
         </h1>
 
         <form onSubmit={handleSignup} className="space-y-5" noValidate>
-          <label htmlFor="name" className="label text-[#780116] font-semibold">
+          <label htmlFor="name" className="label text-[#e3637a] font-semibold">
             Name
           </label>
           <input
@@ -86,7 +86,7 @@ const Signup = () => {
             required
           />
 
-          <label htmlFor="Photo" className="label text-[#780116] font-semibold">
+          <label htmlFor="Photo" className="label text-[#e3637a] font-semibold">
             Photo URL
           </label>
           <input
@@ -98,7 +98,7 @@ const Signup = () => {
             required
           />
 
-          <label htmlFor="email" className="label text-[#780116] font-semibold">
+          <label htmlFor="email" className="label text-[#e3637a] font-semibold">
             Email Address
           </label>
           <input
@@ -112,7 +112,7 @@ const Signup = () => {
 
           <label
             htmlFor="password"
-            className="label text-[#780116] font-semibold"
+            className="label text-[#e3637a] font-semibold"
           >
             Password
           </label>
@@ -160,13 +160,13 @@ const Signup = () => {
           <button
             type="button"
             onClick={handleGoogle}
-            className="btn w-full border border-[#c32f27] text-[#780116] flex items-center justify-center gap-2"
+            className="btn w-full border border-[#c32f27] text-[#e3637a] flex items-center justify-center gap-2"
           >
             <FcGoogle size={20} />
             Sign up with Google
           </button>
 
-          <p className="text-center text-[#780116] text-sm">
+          <p className="text-center text-[#e3637a] text-sm">
             Already have an account?
             <Link to="/login" className="text-[#c32f27] ml-1 hover:underline">
               Login now

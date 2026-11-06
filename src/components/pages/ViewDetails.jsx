@@ -23,13 +23,13 @@ const ViewDetails = () => {
     setLoading(true);
 
     const fetchBlog = axios.get(
-      `https://blogs-server-indol.vercel.app/allBlogs/${id}`
+      `https://blogs-server-indol.vercel.app/allBlogs/${id}`,
     );
     const fetchComments = axios.get(
-      `https://blogs-server-indol.vercel.app/comments/${id}`
+      `https://blogs-server-indol.vercel.app/comments/${id}`,
     );
     const fetchRelated = axios.get(
-      `https://blogs-server-indol.vercel.app/allBlogs`
+      `https://blogs-server-indol.vercel.app/allBlogs`,
     );
 
     Promise.all([fetchBlog, fetchComments, fetchRelated])
@@ -82,7 +82,7 @@ const ViewDetails = () => {
     try {
       const res = await axios.post(
         "https://blogs-server-indol.vercel.app/comments",
-        newComment
+        newComment,
       );
       setComments((prev) => [res.data, ...prev]);
       setCommentText("");
@@ -140,7 +140,7 @@ const ViewDetails = () => {
         />
 
         <motion.div
-          className="flex items-center mb-2 space-x-2 text-[#780116]"
+          className="flex items-center mb-2 space-x-2 text-[#e3637a]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -172,7 +172,7 @@ const ViewDetails = () => {
 
         {/* Comments Section */}
         <section className="comments-section mt-10">
-          <div className="flex items-center mb-4 space-x-2 text-[#780116]">
+          <div className="flex items-center mb-4 space-x-2 text-[#e3637a]">
             <FiMessageCircle size={26} />
             <h2 className="text-2xl font-semibold">Comments</h2>
           </div>
@@ -184,7 +184,7 @@ const ViewDetails = () => {
           ) : user ? (
             <div className="mb-6">
               <textarea
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#780116]"
+                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#e3637a]"
                 rows={4}
                 placeholder="Write your comment here..."
                 value={commentText}
@@ -234,7 +234,7 @@ const ViewDetails = () => {
 
       {/* Sidebar with related blogs */}
       <aside className="w-full lg:w-80 border-l border-gray-300 pl-6 sticky top-24 self-start max-h-[80vh] overflow-y-auto">
-        <h3 className="text-2xl font-bold text-[#780116] mb-6">More Blogs</h3>
+        <h3 className="text-2xl font-bold text-[#e3637a] mb-6">More Blogs</h3>
         <div className="space-y-6">
           {relatedBlogs.map(({ _id, title, image, shortDesc }) => (
             <motion.div
@@ -250,7 +250,7 @@ const ViewDetails = () => {
                 className="w-20 h-20 rounded-md object-cover flex-shrink-0"
               />
               <div className="flex flex-col justify-center">
-                <h4 className="text-lg font-semibold text-[#780116] truncate max-w-[12rem]">
+                <h4 className="text-lg font-semibold text-[#e3637a] truncate max-w-[12rem]">
                   {title}
                 </h4>
                 <p className="text-gray-600 text-sm line-clamp-2 max-w-[12rem]">

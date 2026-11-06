@@ -69,13 +69,13 @@ const TopBlogs = () => {
         header: "Word Count",
         accessorKey: "wordCount",
         cell: (info) => (
-          <span className="font-semibold text-[#780116]">
+          <span className="font-semibold text-[#e3637a]">
             {info.getValue()}
           </span>
         ),
       },
     ],
-    []
+    [],
   );
 
   const table = useReactTable({
@@ -90,7 +90,7 @@ const TopBlogs = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="w-12 h-12 border-4 border-[#ffd6c2] border-t-[#780116] rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-[#ffd6c2] border-t-[#e3637a] rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -99,8 +99,8 @@ const TopBlogs = () => {
     <div className="max-w-6xl mx-auto px-6 py-10">
       {/* Header */}
       <div className="flex items-center justify-center gap-2 mb-6">
-        <FaChartBar className="text-3xl text-[#780116]" />
-        <h2 className="text-3xl font-bold text-[#780116] text-center">
+        <FaChartBar className="text-3xl text-[#e3637a]" />
+        <h2 className="text-3xl font-bold text-[#e3637a] text-center">
           Top 10 Blogs by Word Count
         </h2>
       </div>
@@ -116,17 +116,17 @@ const TopBlogs = () => {
                     <th
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
-                      className="px-6 py-4 border-b text-[#780116] font-semibold cursor-pointer select-none hover:bg-gray-100 transition-colors text-left"
+                      className="px-6 py-4 border-b text-[#e3637a] font-semibold cursor-pointer select-none hover:bg-gray-100 transition-colors text-left"
                     >
                       <div className="inline-flex items-center gap-1">
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                         {{
-                          asc: <FaSortUp className="text-xs text-[#780116]" />,
+                          asc: <FaSortUp className="text-xs text-[#e3637a]" />,
                           desc: (
-                            <FaSortDown className="text-xs text-[#780116]" />
+                            <FaSortDown className="text-xs text-[#e3637a]" />
                           ),
                         }[header.column.getIsSorted()] ?? (
                           <FaSort className="text-xs text-gray-400" />
@@ -149,7 +149,7 @@ const TopBlogs = () => {
                     <td key={cell.id} className="px-6 py-3 border-b">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </td>
                   ))}

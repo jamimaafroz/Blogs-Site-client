@@ -74,7 +74,7 @@ const AboutSection = () => {
     <section className="relative bg-gradient-to-r from-[#fff1e6] via-[#ffd6c2] to-[#fff7f0] py-20 px-4 overflow-x-hidden">
       <div className="max-w-7xl mx-auto text-center">
         <motion.h2
-          className="text-4xl font-extrabold mb-10 text-[#780116]"
+          className="text-4xl font-extrabold mb-10 text-[#e3637a]"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -84,7 +84,7 @@ const AboutSection = () => {
         </motion.h2>
 
         <motion.p
-          className="max-w-3xl mx-auto text-gray-700 mb-16 text-lg leading-relaxed"
+          className="max-w-3xl mx-auto text-black mb-16 text-lg leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
@@ -145,7 +145,7 @@ const AboutSection = () => {
         transition={{ repeat: Infinity, duration: 20 }}
       />
       <motion.div
-        className="absolute bottom-12 right-12 w-48 h-48 bg-[#780116] opacity-10 rounded-full blur-4xl"
+        className="absolute bottom-12 right-12 w-48 h-48 bg-[#e3637a] opacity-10 rounded-full blur-4xl"
         animate={{ x: [0, -20, 15, 0], y: [0, 10, -15, 0] }}
         transition={{ repeat: Infinity, duration: 24 }}
       />

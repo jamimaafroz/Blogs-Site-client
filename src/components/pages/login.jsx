@@ -90,7 +90,7 @@ const Login = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl font-extrabold mb-8 text-center text-[#780116] tracking-tight">
+          <h2 className="text-4xl font-extrabold mb-8 text-center text-[#e3637a] tracking-tight">
             Welcome Back
           </h2>
 
@@ -99,7 +99,7 @@ const Login = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block font-semibold mb-2 text-[#780116]"
+                className="block font-semibold mb-2 text-[#e3637a]"
               >
                 Email address
               </label>
@@ -111,7 +111,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="w-full px-5 py-3 rounded-lg border border-[#db7c26] text-[#780116] placeholder-[#a05a29] focus:outline-none focus:ring-2 focus:ring-[#c32f27] focus:border-[#c32f27] transition"
+                className="w-full px-5 py-3 rounded-lg border border-[#db7c26] text-[#e3637a] placeholder-[#a05a29] focus:outline-none focus:ring-2 focus:ring-[#c32f27] focus:border-[#c32f27] transition"
               />
             </div>
 
@@ -119,7 +119,7 @@ const Login = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block font-semibold mb-2 text-[#780116]"
+                className="block font-semibold mb-2 text-[#e3637a]"
               >
                 Password
               </label>
@@ -131,7 +131,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
-                className="w-full px-5 py-3 rounded-lg border border-[#db7c26] text-[#780116] placeholder-[#a05a29] focus:outline-none focus:ring-2 focus:ring-[#c32f27] focus:border-[#c32f27] transition"
+                className="w-full px-5 py-3 rounded-lg border border-[#db7c26] text-[#e3637a] placeholder-[#a05a29] focus:outline-none focus:ring-2 focus:ring-[#c32f27] focus:border-[#c32f27] transition"
               />
             </div>
 
@@ -147,14 +147,14 @@ const Login = () => {
             <button
               type="button"
               onClick={handleGoogleSignIn}
-              className="w-full mt-3 border border-[#c32f27] text-[#780116] bg-white flex items-center justify-center py-3 rounded-lg font-bold shadow-sm hover:shadow-md hover:scale-[1.04] transition transform"
+              className="w-full mt-3 border border-[#c32f27] text-[#e3637a] bg-white flex items-center justify-center py-3 rounded-lg font-bold shadow-sm hover:shadow-md hover:scale-[1.04] transition transform"
             >
               <FcGoogle size="1.5em" className="mr-2" />
               Sign in with Google
             </button>
 
             {/* Signup Link */}
-            <p className="text-[#780116] font-semibold text-sm text-center mt-6">
+            <p className="text-[#e3637a] font-semibold text-sm text-center mt-6">
               Don&apos;t have an account?{" "}
               <Link
                 to="/signup"

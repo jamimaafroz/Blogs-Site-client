@@ -25,7 +25,7 @@ const TipsSection = () => {
     <div className="relative overflow-hidden py-16 bg-gradient-to-br from-[#fff7f0] via-[#ffe1d6] to-[#ffffff]">
       <div className="container mx-auto px-4 text-center">
         <motion.h2
-          className="text-4xl font-bold mb-6 text-[#780116] flex items-center justify-center gap-2"
+          className="text-4xl font-bold mb-6 text-[#e3637a] flex items-center justify-center gap-2"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -72,7 +72,7 @@ const TipsSection = () => {
         transition={{ repeat: Infinity, duration: 12 }}
       />
       <motion.div
-        className="absolute bottom-0 right-0 w-64 h-64 bg-[#780116] opacity-10 rounded-full blur-3xl"
+        className="absolute bottom-0 right-0 w-64 h-64 bg-[#e3637a] opacity-10 rounded-full blur-3xl"
         animate={{ x: [0, -60, 40, 0], y: [0, 30, -30, 0] }}
         transition={{ repeat: Infinity, duration: 14 }}
       />

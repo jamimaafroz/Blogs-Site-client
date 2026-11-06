@@ -5,10 +5,10 @@ import Footer from "../pages/Footer";
 
 const Mainlayout = () => {
   return (
-    <div className="max-w-full mx-auto">
-      <Navbar></Navbar>
-      <Outlet></Outlet>
-      <Footer></Footer>
+    <div className="max-w-full mx-auto min-h-screen bg-bg font-heading text-fg">
+      <Navbar />
+      <Outlet />
+      <Footer />
     </div>
   );
 };

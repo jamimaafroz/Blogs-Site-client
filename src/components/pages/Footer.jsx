@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer sm:footer-horizontal bg-white text-base-content p-10 border-t border-[#db7c26]">
       <section className="flex flex-col items-start space-y-3">
-        <div className="text-7xl text-[#780116]" aria-label="Company Logo">
+        <div className="text-7xl text-[#e3637a]" aria-label="Company Logo">
           <AiOutlineAliwangwang />
         </div>
         <p className="text-[#c32f27] font-semibold mt-2 leading-relaxed max-w-xs">
@@ -16,7 +16,7 @@ const Footer = () => {
       </section>
 
       <section>
-        <h6 className="footer-title text-[#780116] font-semibold mb-3">
+        <h6 className="footer-title text-[#e3637a] font-semibold mb-3">
           Services
         </h6>
         <p className="text-[#d8572a] mb-1">Branding</p>
@@ -26,7 +26,7 @@ const Footer = () => {
       </section>
 
       <section>
-        <h6 className="footer-title text-[#780116] font-semibold mb-3">
+        <h6 className="footer-title text-[#e3637a] font-semibold mb-3">
           Company
         </h6>
         <p className="text-[#d8572a] mb-1">About Us</p>
@@ -36,7 +36,7 @@ const Footer = () => {
       </section>
 
       <section>
-        <h6 className="footer-title text-[#780116] font-semibold mb-3">
+        <h6 className="footer-title text-[#e3637a] font-semibold mb-3">
           Legal
         </h6>
         <p className="text-[#d8572a] mb-1">Terms of Use</p>

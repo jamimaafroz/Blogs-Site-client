@@ -1,9 +1,13 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+}
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 .loader {
     border-top-color: #3498db;
-    /* blue color */
     animation: spin 1s linear infinite;
 }
 
@@ -21,7 +25,9 @@
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scrollbar {
     -ms-overflow-style: none;
-    /* IE and Edge */
     scrollbar-width: none;
-    /* Firefox */
+}
+
+@theme {
+    --font-heading: "Playfair Display", serif;
 }

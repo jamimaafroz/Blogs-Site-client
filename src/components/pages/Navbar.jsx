@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { AuthContext } from "../Contexts/AuthContext";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
+import ThemeToggle from "../../theme/ThemeToggle";
 
 const Navbar = () => {
   const { user, SignOutUser } = useContext(AuthContext);
@@ -36,26 +37,26 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        {/* Left: Logo + Mobile Menu */}
-        <div className="flex items-center gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between">
+        {/* Left: Mobile Menu + Logo */}
+        <div className="flex items-center gap-1 sm:gap-3">
           {/* Mobile Dropdown */}
           <div className="lg:hidden dropdown">
             <label
               tabIndex={0}
-              className="btn btn-ghost p-2 text-[#780116] dark:text-[#c32f27]"
+              className="btn btn-ghost p-1 sm:p-2 text-[#e3637a] dark:text-[#e3637a]"
             >
-              <FiAlignJustify size={26} />
+              <FiAlignJustify size={24} />
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content menu menu-sm bg-white dark:bg-gray-800 rounded-lg mt-3 w-52 p-2 shadow-lg border border-gray-200 dark:border-gray-700"
+              className="dropdown-content menu menu-sm bg-white dark:bg-gray-800 rounded-lg mt-3 w-52 p-2 shadow-lg border border-gray-200 dark:border-gray-700 z-50"
             >
               {links.map(({ to, label }) => (
                 <li key={to}>
                   <Link
                     to={to}
-                    className="px-3 py-2 rounded font-medium text-[#c32f27] dark:text-[#c32f27] hover:bg-[#d8572a] hover:text-white dark:hover:text-white transition"
+                    className="px-3 py-2 rounded font-medium text-[#c32f27] dark:text-[#e3637a] hover:bg-[#d8572a] hover:text-white dark:hover:text-white transition"
                   >
                     {label}
                   </Link>
@@ -65,9 +66,9 @@ const Navbar = () => {
           </div>
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <AiOutlineAliwangwang className="text-4xl text-[#780116] group-hover:text-[#c32f27] dark:text-[#c32f27] dark:group-hover:text-[#c32f27] transition-colors" />
-            <span className="text-2xl font-extrabold text-[#780116] group-hover:text-[#c32f27] dark:text-[#c32f27] dark:group-hover:text-[#c32f27] transition-colors">
+          <Link to="/" className="flex items-center gap-1.5 sm:gap-2 group">
+            <AiOutlineAliwangwang className="text-3xl sm:text-4xl text-[#e3637a] group-hover:text-[#c32f27] dark:text-[#e3637a] dark:group-hover:text-[#c32f27] transition-colors" />
+            <span className="text-xl sm:text-2xl font-extrabold text-[#e3637a] group-hover:text-[#c32f27] dark:text-[#e3637a] dark:group-hover:text-[#c32f27] transition-colors">
               Web-Blog
             </span>
           </Link>
@@ -83,7 +84,7 @@ const Navbar = () => {
             >
               <Link
                 to={to}
-                className="px-3 py-2 rounded-md text-[#c32f27] dark:text-[#c32f27] hover:bg-[#d8572a] hover:text-white dark:hover:text-white transition-colors"
+                className="px-3 py-2 rounded-md text-[#c32f27] dark:text-[#e3637a] hover:bg-[#d8572a] hover:text-white dark:hover:text-white transition-colors"
               >
                 {label}
               </Link>
@@ -91,23 +92,24 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* Right: Auth Actions */}
-        <div className="flex items-center gap-3">
+        {/* Right: Auth Actions & Theme Toggle */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle />
           {!user ? (
-            <>
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <Link
                 to="/login"
-                className="px-5 py-2 rounded-md font-semibold border border-[#c32f27] text-[#c32f27] hover:bg-[#c32f27] hover:text-white transition-colors duration-300"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-md font-semibold border border-[#c32f27] text-[#c32f27] hover:bg-[#c32f27] hover:text-white transition-colors duration-300"
               >
                 Log In
               </Link>
               <Link
                 to="/signup"
-                className="px-5 py-2 rounded-md font-semibold bg-[#c32f27] text-white shadow-md hover:bg-[#a1251a] transition-colors duration-300"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-md font-semibold bg-[#c32f27] text-white shadow-md hover:bg-[#a1251a] transition-colors duration-300"
               >
                 Sign Up
               </Link>
-            </>
+            </div>
           ) : (
             <div className="dropdown dropdown-end">
               <label
@@ -122,7 +124,7 @@ const Navbar = () => {
               </label>
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-white dark:bg-gray-800 rounded-lg shadow-lg mt-3 w-56 p-2 border border-gray-200 dark:border-gray-700"
+                className="menu menu-sm dropdown-content bg-white dark:bg-gray-800 rounded-lg shadow-lg mt-3 w-56 p-2 border border-gray-200 dark:border-gray-700 z-50"
               >
                 <li>
                   <Link

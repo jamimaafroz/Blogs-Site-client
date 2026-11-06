@@ -32,7 +32,7 @@ const Newsletter = () => {
 
   return (
     <motion.section
-      className="bg-[#f7f7f7] py-12 px-6 text-center rounded-lg shadow-md max-w-3xl mx-auto"
+      className=" dark:bg-transparent py-12 px-6 text-center rounded-lg shadow-md max-w-3xl mx-auto"
       initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
@@ -41,7 +41,7 @@ const Newsletter = () => {
       <Toaster position="top-center" />
 
       <motion.h2
-        className="text-3xl font-extrabold mb-4 text-[#780116]"
+        className="text-3xl font-extrabold mb-4 text-[#e3637a]"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.6 }}
@@ -70,17 +70,17 @@ const Newsletter = () => {
         <motion.input
           type="email"
           placeholder="Enter your email address"
-          className="p-3 w-full sm:w-80 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#780116] transition"
+          className="p-3 w-full sm:w-80 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#e3637a] transition"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           aria-label="Email address"
           disabled={isSubmitting}
           required
-          whileFocus={{ scale: 1.03, borderColor: "#780116" }}
+          whileFocus={{ scale: 1.03, borderColor: "#e3637a" }}
           transition={{ type: "spring", stiffness: 300 }}
         />
         <motion.button
-          whileHover={{ scale: 1.07, backgroundColor: "#780116" }}
+          whileHover={{ scale: 1.07, backgroundColor: "#e3637a" }}
           whileTap={{ scale: 0.95 }}
           type="submit"
           className={`bg-[#d8572a] text-white px-6 py-3 rounded-md font-semibold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed`}

@@ -42,7 +42,7 @@ const ContactSection = () => {
     <section className="relative bg-gradient-to-r from-[#fff7f0] via-[#ffd6c2] to-[#fff1e6] py-20 px-4">
       <div className="max-w-4xl mx-auto text-center">
         <motion.h2
-          className="text-4xl font-extrabold mb-8 text-[#780116]"
+          className="text-4xl font-extrabold mb-8 text-[#e3637a]"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -125,7 +125,7 @@ const ContactSection = () => {
 
           <motion.button
             type="submit"
-            className="w-full bg-[#d8572a] text-white py-4 rounded-md font-semibold shadow-lg hover:bg-[#780116] focus:ring-4 focus:ring-[#780116]/60 transition-colors"
+            className="w-full bg-[#d8572a] text-white py-4 rounded-md font-semibold shadow-lg hover:bg-[#e3637a] focus:ring-4 focus:ring-[#e3637a]/60 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileFocus={{ scale: 1.05, y: -3 }}
             whileTap={{ scale: 0.95 }}
@@ -143,7 +143,7 @@ const ContactSection = () => {
         transition={{ repeat: Infinity, duration: 15 }}
       />
       <motion.div
-        className="absolute bottom-10 right-10 w-48 h-48 bg-[#780116] opacity-10 rounded-full blur-4xl"
+        className="absolute bottom-10 right-10 w-48 h-48 bg-[#e3637a] opacity-10 rounded-full blur-4xl"
         animate={{ x: [0, -25, 20, 0], y: [0, 15, -20, 0] }}
         transition={{ repeat: Infinity, duration: 18 }}
       />

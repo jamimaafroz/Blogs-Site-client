@@ -17,7 +17,7 @@ const RecentBlogs = () => {
     const fetchData = async () => {
       try {
         const blogRes = await axios.get(
-          "https://blogs-server-indol.vercel.app/allBlogs"
+          "https://blogs-server-indol.vercel.app/allBlogs",
         );
         setBlogs(blogRes.data.slice(0, 8)); // Show 8 recent blogs for better row fill
 
@@ -29,7 +29,7 @@ const RecentBlogs = () => {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            }
+            },
           );
           setWishlist(wishRes.data);
         }
@@ -56,7 +56,7 @@ const RecentBlogs = () => {
       Swal.fire(
         "Already in wishlist!",
         `"${blog.title}" is already added.`,
-        "info"
+        "info",
       );
       return;
     }
@@ -74,7 +74,7 @@ const RecentBlogs = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (res.data.item?._id) {
@@ -99,7 +99,7 @@ const RecentBlogs = () => {
   return (
     <section className="container mx-auto px-6 py-10 rounded-2xl">
       <motion.h2
-        className="text-4xl font-extrabold text-center text-[#780116] mb-12"
+        className="text-4xl font-extrabold text-center text-[#e3637a] mb-12"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
@@ -107,7 +107,7 @@ const RecentBlogs = () => {
         Recent Blogs
       </motion.h2>
       <motion.p
-        className="text-center text-gray-700 max-w-3xl mx-auto mb-12"
+        className="text-center text-gray-400 max-w-3xl mx-auto mb-12"
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2 }}
@@ -138,7 +138,7 @@ const RecentBlogs = () => {
             />
             <div className="p-5 flex flex-col flex-grow">
               <h3
-                className="text-lg font-semibold text-[#780116] mb-2 truncate"
+                className="text-lg font-semibold text-[#e3637a] mb-2 truncate"
                 title={blog.title}
               >
                 {blog.title}

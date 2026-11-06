@@ -24,7 +24,7 @@ const Wishlist = () => {
           `https://blogs-server-indol.vercel.app/wishlist/${user.email}`,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
         setWishlist(res.data);
       } catch (error) {
@@ -47,7 +47,7 @@ const Wishlist = () => {
       const token = await user.getIdToken();
       await axios.delete(
         `https://blogs-server-indol.vercel.app/wishlist/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       setWishlist((prev) => prev.filter((item) => item._id !== id));
       Swal.fire({
@@ -112,7 +112,7 @@ const Wishlist = () => {
       <header className="flex flex-col items-center justify-center mb-8 space-y-4 text-center max-w-3xl mx-auto">
         <div className="flex items-center space-x-3">
           <FiHeart size={36} className="text-[#c32f27]" aria-hidden="true" />
-          <h1 className="text-4xl font-extrabold text-[#780116]">
+          <h1 className="text-4xl font-extrabold text-[#e3637a]">
             My Wishlist
           </h1>
         </div>
@@ -141,7 +141,7 @@ const Wishlist = () => {
             />
             <div className="p-4 flex flex-col flex-grow">
               <h2
-                className="text-lg font-semibold text-[#780116] truncate mb-1"
+                className="text-lg font-semibold text-[#e3637a] truncate mb-1"
                 title={blogData?.title}
               >
                 {blogData?.title}

@@ -22,7 +22,7 @@ const AllBlogs = () => {
     const fetchData = async () => {
       try {
         const { data: blogData } = await axios.get(
-          "https://blogs-server-indol.vercel.app/allBlogs"
+          "https://blogs-server-indol.vercel.app/allBlogs",
         );
         setBlogs(blogData);
         setFilteredBlogs(blogData);
@@ -31,7 +31,7 @@ const AllBlogs = () => {
           const token = await user.getIdToken();
           const { data: wishlistData } = await axios.get(
             `https://blogs-server-indol.vercel.app/wishlist/${user.email}`,
-            { headers: { Authorization: `Bearer ${token}` } }
+            { headers: { Authorization: `Bearer ${token}` } },
           );
           setWishlist(wishlistData);
         }
@@ -60,7 +60,7 @@ const AllBlogs = () => {
 
     if (searchQuery.trim()) {
       result = result.filter((blog) =>
-        blog.title.toLowerCase().includes(searchQuery.toLowerCase())
+        blog.title.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
@@ -85,7 +85,7 @@ const AllBlogs = () => {
         setWishlist((prev) => prev.filter((item) => item.blogId !== blog._id));
         await axios.delete(
           `https://blogs-server-indol.vercel.app/wishlist/${existing._id}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         Swal.fire({
           icon: "success",
@@ -110,13 +110,15 @@ const AllBlogs = () => {
             userEmail: user.email,
             blogData: blog,
           },
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         if (res.data.insertedId) {
           setWishlist((prev) =>
             prev.map((item) =>
-              item._id === tempId ? { ...item, _id: res.data.insertedId } : item
-            )
+              item._id === tempId
+                ? { ...item, _id: res.data.insertedId }
+                : item,
+            ),
           );
         }
         Swal.fire({
@@ -148,7 +150,7 @@ const AllBlogs = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-extrabold text-center mb-8 tracking-wide text-[#780116]">
+      <h1 className="text-4xl font-extrabold text-center mb-8 tracking-wide text-[#e3637a]">
         All Blogs
       </h1>
 
@@ -161,7 +163,7 @@ const AllBlogs = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <FaFilter className="text-[#780116] text-lg" />
+            <FaFilter className="text-[#e3637a] text-lg" />
             <h2 className="text-lg font-semibold text-gray-800">
               Filter Blogs
             </h2>
@@ -177,7 +179,7 @@ const AllBlogs = () => {
               placeholder="Search blogs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#780116]"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e3637a]"
             />
             <FaSearch className="absolute left-3 top-3.5 text-gray-400" />
           </div>
@@ -186,7 +188,7 @@ const AllBlogs = () => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#780116]"
+            className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e3637a]"
           >
             <option value="">All Categories</option>
             <option value="Technology">Technology</option>
@@ -199,7 +201,7 @@ const AllBlogs = () => {
           {/* Search Button */}
           <button
             onClick={handleSearch}
-            className="w-full p-3 bg-[#d8572a] rounded-lg text-white hover:bg-[#780116] transition-colors flex justify-center"
+            className="w-full p-3 bg-[#d8572a] rounded-lg text-white hover:bg-[#e3637a] transition-colors flex justify-center"
           >
             <FaSearch size={18} />
             <span className="ml-2">Search</span>
@@ -210,7 +212,7 @@ const AllBlogs = () => {
         <div className="lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredBlogs.map((blog) => {
             const isWishlisted = wishlist.some(
-              (item) => item.blogId === blog._id
+              (item) => item.blogId === blog._id,
             );
             return (
               <motion.div
@@ -225,7 +227,7 @@ const AllBlogs = () => {
                 />
                 <div className="flex flex-col flex-grow p-5">
                   <h2
-                    className="mb-2 text-2xl font-semibold text-[#780116] truncate"
+                    className="mb-2 text-2xl font-semibold text-[#e3637a] truncate"
                     title={blog.title}
                   >
                     {blog.title}
@@ -255,7 +257,7 @@ const AllBlogs = () => {
                     )}
                     <button
                       onClick={() => handleViewDetails(blog._id)}
-                      className="text-sm font-medium text-[#780116] underline hover:no-underline"
+                      className="text-sm font-medium text-[#e3637a] underline hover:no-underline"
                     >
                       View Details
                     </button>
