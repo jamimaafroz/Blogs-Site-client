@@ -7,7 +7,7 @@ It’s designed to be recruiter-friendly with clean UI, modern features, and opt
 ---
 
 ## 🌐 Live Site
-🔗 **Live Link:** [https://eloquent-granita-be0d86.netlify.app/]
+🔗 **Live Link:** [https://jazzy-kangaroo-66202e.netlify.app/]
 
 ---
 
