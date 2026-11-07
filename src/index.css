@@ -28,6 +28,10 @@
     scrollbar-width: none;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 @theme {
     --font-heading: "Playfair Display", serif;
 }

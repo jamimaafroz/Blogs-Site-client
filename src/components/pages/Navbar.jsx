@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineAliwangwang } from "react-icons/ai";
-import { FiAlignJustify } from "react-icons/fi";
+import { FiAlignJustify, FiUser } from "react-icons/fi";
 import { Link } from "react-router";
 import { AuthContext } from "../Contexts/AuthContext";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 import ThemeToggle from "../../theme/ThemeToggle";
+import { useLocation } from "react-router";
 
 const Navbar = () => {
   const { user, SignOutUser } = useContext(AuthContext);
@@ -33,15 +34,36 @@ const Navbar = () => {
     { to: "/Blogs", label: "All Blogs" },
     { to: "/Features", label: "Featured Blogs" },
     ...(user ? [{ to: "/wishList", label: "Wishlist" }] : []),
+    { to: "/#recent", label: "Recent" },
+    { to: "/#tips", label: "Tips" },
+    { to: "/#about", label: "About" },
+    { to: "/#contact", label: "Contact" },
   ];
 
+  const { pathname } = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const transparent = pathname === "/" && !scrolled;
   return (
-    <nav className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <nav
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        transparent
+          ? "bg-transparent border-b border-transparent"
+          : "bg-transparent backdrop-blur-md shadow-md border-b border-gray-200 dark:border-gray-700"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between">
         {/* Left: Mobile Menu + Logo */}
         <div className="flex items-center gap-1 sm:gap-3">
           {/* Mobile Dropdown */}
-          <div className="lg:hidden dropdown">
+          <div className="xl:hidden dropdown">
             <label
               tabIndex={0}
               className="btn btn-ghost p-1 sm:p-2 text-[#e3637a] dark:text-[#e3637a]"
@@ -75,7 +97,7 @@ const Navbar = () => {
         </div>
 
         {/* Center: Desktop Links */}
-        <ul className="hidden lg:flex gap-8 font-medium">
+        <ul className="hidden xl:flex gap-1 font-medium text-sm">
           {links.map(({ to, label }) => (
             <motion.li
               key={to}
@@ -96,20 +118,14 @@ const Navbar = () => {
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
           {!user ? (
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <Link
-                to="/login"
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-md font-semibold border border-[#e3637a] text-[#c32f27] hover:bg-[#c32f27] hover:text-white transition-colors duration-300"
-              >
-                Log In
-              </Link>
-              <Link
-                to="/signup"
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-md font-semibold bg-[#c32f27] text-white shadow-md hover:bg-[#a1251a] transition-colors duration-300"
-              >
-                Sign Up
-              </Link>
-            </div>
+            <Link
+              to="/login"
+              aria-label="Log in"
+              title="Log in"
+              className="btn btn-ghost btn-circle text-[#e3637a] hover:bg-[#f7ac91] hover:text-white transition-colors"
+            >
+              <FiUser size={22} />
+            </Link>
           ) : (
             <div className="dropdown dropdown-end">
               <label

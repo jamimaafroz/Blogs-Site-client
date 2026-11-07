@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router";
+import { FiArrowRight } from "react-icons/fi";
 
 const images = [
   "https://i.ibb.co/FkdMGG1P/best-travel-background.jpg",
@@ -8,62 +9,123 @@ const images = [
   "https://i.ibb.co/4R7JKhgZ/webpc-passthru.webp",
 ];
 
+const SLIDE_MS = 6000;
+
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+};
+
 const BannerWithSlider = () => {
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [current, setCurrent] = useState(0);
 
+  // Restarts whenever the slide changes, so clicking an indicator resets the timer
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    const t = setTimeout(
+      () => setCurrent((prev) => (prev + 1) % images.length),
+      SLIDE_MS,
+    );
+    return () => clearTimeout(t);
+  }, [current]);
 
   return (
-    <div className="relative w-full h-[90vh] overflow-hidden font-sans">
-      {/* Background Image with Gradient Overlay */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={images[currentIndex]}
-          className="absolute top-0 left-0 w-full h-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+    <section className="relative -mt-[73px] h-screen min-h-[560px] w-full overflow-hidden bg-black">
+      {/* Slides: crossfade + slow zoom */}
+      <AnimatePresence>
+        <motion.img
+          key={images[current]}
+          src={images[current]}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          initial={{ opacity: 0, scale: 1.15 }}
+          animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-          style={{
-            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.3)), url(${images[currentIndex]})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+          transition={{
+            opacity: { duration: 1.2 },
+            scale: { duration: 7, ease: "easeOut" },
           }}
         />
       </AnimatePresence>
 
-      {/* Content */}
-      <div className="relative z-20 flex items-center justify-center h-full px-4">
+      {/* Overlays: darker on the text side, plus a fade behind the navbar */}
+      <div className="absolute inset-0 bg-black/50 md:bg-transparent md:bg-gradient-to-l md:from-black/80 md:via-black/45 md:to-black/5" />
+      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/50 to-transparent" />
+
+      {/* Content (right side) */}
+      <div className="relative z-20 mx-auto flex h-full max-w-7xl items-center justify-center px-6 md:justify-end md:px-12">
         <motion.div
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-8 text-center max-w-2xl border border-white/20 shadow-lg"
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="flex max-w-xl flex-col items-center text-center md:items-end md:text-right"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight drop-shadow-lg">
-            Discover. Read. Share.
-          </h1>
-          <p className="text-lg md:text-xl text-gray-200 mt-4 mb-8">
+          <motion.span
+            variants={item}
+            className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-[#f7ac91]"
+          >
+            Welcome to Web-Blog
+          </motion.span>
+
+          <motion.h1
+            variants={item}
+            className="font-heading text-5xl font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl"
+          >
+            Discover.
+            <br />
+            Read.
+            <br />
+            <span className="text-[#e3637a]">Share.</span>
+          </motion.h1>
+
+          <motion.p
+            variants={item}
+            className="mt-6 max-w-md text-base text-gray-200 sm:text-lg"
+          >
             Dive into trending blogs, explore fresh perspectives, and share your
             own stories with the world.
-          </p>
+          </motion.p>
+
           <motion.button
+            variants={item}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-yellow-400 text-black px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-yellow-300 transition-all"
             onClick={() => navigate("/Blogs")}
+            className="group mt-8 inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#d8572a] to-[#e3637a] px-8 py-3.5 font-semibold text-white shadow-xl shadow-[#e3637a]/30 hover:brightness-110"
           >
-            Browse Blogs
+            Explore
+            <FiArrowRight className="transition-transform group-hover:translate-x-1" />
           </motion.button>
         </motion.div>
       </div>
-    </div>
+
+      {/* Slide indicators with progress fill */}
+      <div className="absolute inset-x-0 bottom-10 z-20 mx-auto flex max-w-7xl justify-center gap-2 px-6 md:justify-end md:px-12">
+        {images.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            className="relative h-1 w-10 overflow-hidden rounded-full bg-white/30 sm:w-14"
+          >
+            {i === current && (
+              <motion.span
+                key={current}
+                className="absolute inset-y-0 left-0 bg-white"
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: SLIDE_MS / 1000, ease: "linear" }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+    </section>
   );
 };
 

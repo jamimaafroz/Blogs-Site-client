@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { FaSearch, FaFilter } from "react-icons/fa";
+import {
+  FaFilter,
+  FaSearch,
+  FaHeart,
+  FaRegHeart,
+  FaArrowRight,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 import { AuthContext } from "../Contexts/AuthContext";
 import Swal from "sweetalert2";
@@ -9,13 +15,20 @@ import Swal from "sweetalert2";
 const AllBlogs = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const categories = [
+    "Technology",
+    "Travel",
+    "Education",
+    "Health",
+    "Lifestyle",
+  ];
 
   // Fetch blogs and wishlist
   useEffect(() => {
@@ -141,132 +154,176 @@ const AllBlogs = () => {
 
   const handleViewDetails = (id) => navigate(`/viewdetails/${id}`);
 
-  if (loading)
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="loader border-8 border-t-8 border-gray-200 rounded-full h-16 w-16"></div>
+        <div className="w-12 h-12 border-4 border-[#e3637a]/20 border-t-[#e3637a] rounded-full animate-spin"></div>
       </div>
     );
+  }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-extrabold text-center mb-8 tracking-wide text-[#e3637a]">
-        All Blogs
-      </h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+      {/* Header */}
+      <div className="text-center mb-10">
+        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#780116] dark:text-[#e3637a]">
+          All Blogs
+        </h1>
+        <p className="mt-3 text-gray-500 dark:text-gray-400">
+          Discover stories, ideas and experiences from our community.
+        </p>
+      </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* LEFT FILTERS */}
-        <motion.div
-          className="lg:w-1/4 bg-white shadow-lg rounded-xl p-6 border border-gray-100"
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
+      <motion.div
+        className="mb-8 rounded-2xl p-4 sm:p-5 backdrop-blur-lg bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 shadow-xl"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+          className="flex flex-col gap-4"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <FaFilter className="text-[#e3637a] text-lg" />
-            <h2 className="text-lg font-semibold text-gray-800">
-              Filter Blogs
-            </h2>
+          {/* Row 1: search + button */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search blogs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 placeholder-gray-400 border border-transparent focus:outline-none focus:border-[#e3637a] focus:ring-2 focus:ring-[#e3637a]/30 transition"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="sm:w-40 py-3 rounded-xl bg-gradient-to-r from-[#d8572a] to-[#e3637a] text-white font-semibold shadow-md hover:shadow-lg hover:brightness-110 transition flex items-center justify-center gap-2"
+            >
+              <FaSearch size={16} />
+              Search
+            </button>
           </div>
-          <p className="text-sm text-gray-500 mb-5">
-            Find blogs by category or search for something specific.
-          </p>
 
-          {/* Search */}
-          <div className="relative mb-4">
-            <input
-              type="text"
-              placeholder="Search blogs..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e3637a]"
-            />
-            <FaSearch className="absolute left-3 top-3.5 text-gray-400" />
+          {/* Row 2: category chips */}
+          <div className="flex items-center gap-3">
+            <span className="hidden sm:flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-300 shrink-0">
+              <FaFilter className="text-[#e3637a]" />
+              Category
+            </span>
+
+            <div className="flex gap-2 overflow-x-auto sm:flex-wrap pb-1 sm:pb-0">
+              {["", ...categories].map((cat) => (
+                <button
+                  type="button"
+                  key={cat || "all"}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium border transition ${
+                    selectedCategory === cat
+                      ? "bg-[#e3637a] border-[#e3637a] text-white shadow-md"
+                      : "border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-[#e3637a] hover:text-[#e3637a]"
+                  }`}
+                >
+                  {cat || "All"}
+                </button>
+              ))}
+            </div>
           </div>
+        </form>
+      </motion.div>
 
-          {/* Category */}
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e3637a]"
-          >
-            <option value="">All Categories</option>
-            <option value="Technology">Technology</option>
-            <option value="Travel">Travel</option>
-            <option value="Education">Education</option>
-            <option value="Health">Health</option>
-            <option value="Lifestyle">Lifestyle</option>
-          </select>
+      {/* BLOG CARDS */}
+      <div className="lg:w-auto">
+        <p className="mb-5 text-sm text-gray-500 dark:text-gray-400">
+          Showing{" "}
+          <span className="font-semibold text-[#e3637a]">
+            {filteredBlogs.length}
+          </span>{" "}
+          blogs
+        </p>
 
-          {/* Search Button */}
-          <button
-            onClick={handleSearch}
-            className="w-full p-3 bg-[#d8572a] rounded-lg text-white hover:bg-[#e3637a] transition-colors flex justify-center"
-          >
-            <FaSearch size={18} />
-            <span className="ml-2">Search</span>
-          </button>
-        </motion.div>
+        {filteredBlogs.length === 0 ? (
+          <div className="text-center py-20 rounded-2xl border border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400">
+            No blogs found. Try a different search or category.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+            {filteredBlogs.map((blog) => {
+              const isWishlisted = wishlist.some(
+                (item) => item.blogId === blog._id,
+              );
+              return (
+                <motion.div
+                  key={blog._id}
+                  whileHover={{ y: -6 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="group flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-2xl transition-shadow"
+                >
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={blog.image}
+                      alt={blog.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold bg-white/90 dark:bg-gray-900/80 text-[#c32f27] dark:text-[#e3637a] backdrop-blur">
+                      {blog.category}
+                    </span>
 
-        {/* BLOG CARDS */}
-        <div className="lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredBlogs.map((blog) => {
-            const isWishlisted = wishlist.some(
-              (item) => item.blogId === blog._id,
-            );
-            return (
-              <motion.div
-                key={blog._id}
-                whileHover={{ scale: 1.03 }}
-                className="flex flex-col bg-white rounded-xl shadow-lg cursor-pointer overflow-hidden"
-              >
-                <img
-                  src={blog.image}
-                  alt={blog.title}
-                  className="w-full h-44 object-cover"
-                />
-                <div className="flex flex-col flex-grow p-5">
-                  <h2
-                    className="mb-2 text-2xl font-semibold text-[#e3637a] truncate"
-                    title={blog.title}
-                  >
-                    {blog.title}
-                  </h2>
-                  <p className="flex-grow text-gray-700">{blog.shortDesc}</p>
-                  <p className="mb-4 mt-3 text-sm text-gray-500">
-                    Category: {blog.category}
-                  </p>
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    {!user ? (
-                      <p className="italic text-sm text-gray-400">
-                        Sign in to use wishlist
-                      </p>
-                    ) : (
+                    {user && (
                       <button
                         onClick={() => handleWishlistToggle(blog)}
-                        className={`px-3 py-1 text-sm font-medium rounded-lg border transition ${
+                        aria-label={
                           isWishlisted
-                            ? "border-red-500 text-red-500 hover:bg-red-50"
-                            : "border-blue-500 text-blue-500 hover:bg-blue-50"
-                        }`}
+                            ? "Remove from wishlist"
+                            : "Add to wishlist"
+                        }
+                        className="absolute top-3 right-3 p-2 rounded-full bg-white/90 dark:bg-gray-900/80 backdrop-blur text-[#e3637a] hover:scale-110 transition"
                       >
-                        {isWishlisted
-                          ? "Remove from Wishlist"
-                          : "Add to Wishlist"}
+                        {isWishlisted ? <FaHeart /> : <FaRegHeart />}
                       </button>
                     )}
-                    <button
-                      onClick={() => handleViewDetails(blog._id)}
-                      className="text-sm font-medium text-[#e3637a] underline hover:no-underline"
-                    >
-                      View Details
-                    </button>
                   </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+
+                  {/* Content */}
+                  <div className="flex flex-col flex-grow p-5">
+                    <h2
+                      title={blog.title}
+                      className="text-xl font-bold text-gray-900 dark:text-white truncate group-hover:text-[#e3637a] transition-colors"
+                    >
+                      {blog.title}
+                    </h2>
+                    <p className="mt-2 flex-grow text-sm leading-relaxed text-gray-600 dark:text-gray-300 line-clamp-3">
+                      {blog.shortDesc}
+                    </p>
+
+                    <div className="mt-5 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                      {!user && (
+                        <span className="text-xs italic text-gray-400">
+                          Sign in to save
+                        </span>
+                      )}
+                      <button
+                        onClick={() => handleViewDetails(blog._id)}
+                        className="ml-auto flex items-center gap-2 text-sm font-semibold text-[#e3637a] hover:text-[#c32f27] transition-colors"
+                      >
+                        View Details
+                        <FaArrowRight
+                          className="transition-transform group-hover:translate-x-1"
+                          size={12}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
