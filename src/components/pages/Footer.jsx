@@ -3,7 +3,7 @@ import { AiOutlineAliwangwang } from "react-icons/ai";
 
 const Footer = () => {
   return (
-    <footer className="footer sm:footer-horizontal bg-white text-base-content p-10 border-t border-[#db7c26]">
+    <footer className="footer sm:footer-horizontal bg-white text-base-content p-10 border-t border-gray-400">
       <section className="flex flex-col items-start space-y-3">
         <div className="text-7xl text-[#e3637a]" aria-label="Company Logo">
           <AiOutlineAliwangwang />

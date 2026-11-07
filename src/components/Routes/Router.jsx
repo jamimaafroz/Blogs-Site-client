@@ -23,14 +23,14 @@ const router = createBrowserRouter([
         path: "/",
         Component: Home,
       },
-      {
-        path: "/login",
-        Component: login,
-      },
-      {
-        path: "/signup",
-        Component: signup,
-      },
+      // {
+      //   path: "/login",
+      //   Component: login,
+      // },
+      // {
+      //   path: "/signup",
+      //   Component: signup,
+      // },
       {
         path: "/addBlog",
         element: (
@@ -41,7 +41,6 @@ const router = createBrowserRouter([
       },
       {
         path: "/Blogs",
-        // loader: () => fetch("https://blogs-server-indol.vercel.app/allblogs"),
         Component: AllBlogs,
       },
       {
@@ -69,6 +68,14 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/login",
+    Component: login,
+  },
+  {
+    path: "/signup",
+    Component: signup,
   },
   {
     path: "/*",

@@ -130,7 +130,7 @@ const AboutSection = () => {
               className={`w-4 h-4 rounded-full transition-colors duration-300 ${
                 idx === activeIndex
                   ? "bg-[#d8572a]"
-                  : "bg-[#d8572a]/40 hover:bg-[#d8572a]/70"
+                  : "bg-[#d8572a]/40 hover:bg-[#f7ac91]/70"
               }`}
               aria-label={`Scroll to card ${idx + 1}`}
             />

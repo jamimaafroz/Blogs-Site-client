@@ -56,7 +56,7 @@ const Navbar = () => {
                 <li key={to}>
                   <Link
                     to={to}
-                    className="px-3 py-2 rounded font-medium text-[#c32f27] dark:text-[#e3637a] hover:bg-[#d8572a] hover:text-white dark:hover:text-white transition"
+                    className="px-3 py-2 rounded font-medium text-[#c32f27] dark:text-[#e3637a] hover:bg-[#f7ac91] hover:text-white dark:hover:text-white transition"
                   >
                     {label}
                   </Link>
@@ -84,7 +84,7 @@ const Navbar = () => {
             >
               <Link
                 to={to}
-                className="px-3 py-2 rounded-md text-[#c32f27] dark:text-[#e3637a] hover:bg-[#d8572a] hover:text-white dark:hover:text-white transition-colors"
+                className="px-3 py-2 rounded-md text-[#c32f27] dark:text-[#e3637a] hover:bg-[#f7ac91] hover:text-white dark:hover:text-white transition-colors"
               >
                 {label}
               </Link>
@@ -99,7 +99,7 @@ const Navbar = () => {
             <div className="flex items-center gap-1.5 sm:gap-2">
               <Link
                 to="/login"
-                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-md font-semibold border border-[#c32f27] text-[#c32f27] hover:bg-[#c32f27] hover:text-white transition-colors duration-300"
+                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-md font-semibold border border-[#e3637a] text-[#c32f27] hover:bg-[#c32f27] hover:text-white transition-colors duration-300"
               >
                 Log In
               </Link>
@@ -114,7 +114,7 @@ const Navbar = () => {
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
-                className="btn btn-ghost btn-circle avatar border-2 border-[#d8572a] hover:border-[#780116] dark:hover:border-[#c32f27] transition"
+                className="btn btn-ghost btn-circle avatar border-2 border-[#d8572a] hover:border-[#780116] dark:hover:border-[#e3637a] transition"
               >
                 <img
                   src={user.photoURL || "https://ui-avatars.com/api/?name=User"}
@@ -129,7 +129,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     to="/profile"
-                    className="px-3 py-2 rounded hover:bg-[#d8572a] hover:text-white text-[#c32f27] dark:text-white font-medium"
+                    className="px-3 py-2 rounded hover:bg-[#f7ac91] hover:text-white text-[#c32f27] dark:text-white font-medium"
                   >
                     Profile
                   </Link>
@@ -137,7 +137,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     to="/settings"
-                    className="px-3 py-2 rounded hover:bg-[#d8572a] hover:text-white text-[#c32f27] dark:text-white font-medium"
+                    className="px-3 py-2 rounded hover:bg-[#f7ac91] hover:text-white text-[#c32f27] dark:text-white font-medium"
                   >
                     Settings
                   </Link>
@@ -145,7 +145,7 @@ const Navbar = () => {
                 <li>
                   <button
                     onClick={handleSignOut}
-                    className="w-full text-left px-3 py-2 rounded hover:bg-[#d8572a] hover:text-white text-[#c32f27] dark:text-white font-medium"
+                    className="w-full text-left px-3 py-2 rounded hover:bg-[#f7ac91] hover:text-white text-[#c32f27] dark:text-white font-medium"
                   >
                     Logout
                   </button>

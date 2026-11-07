@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { AuthContext } from "../Contexts/AuthContext";
 import { motion } from "framer-motion";
+import AuthTopBar from "./AuthTopBar";
 
 const Login = () => {
   const { LoginUser, googleSignIn } = useContext(AuthContext);
@@ -49,7 +50,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen grid md:grid-cols-2">
+    <div className="min-h-screen font-heading grid md:grid-cols-2">
+      <AuthTopBar />
       {/* Left Section - Branding */}
       <div className="hidden md:flex flex-col justify-center items-center p-10 text-center relative overflow-hidden min-h-screen">
         {/* Blurred Background Layer */}
@@ -64,7 +66,7 @@ const Login = () => {
         {/* Content */}
         <div className="relative z-30 bg-[rgb(255,245,225,0.15)] backdrop-blur-lg p-10 rounded-3xl shadow-2xl max-w-xl w-full ">
           <motion.h1
-            className="relative z-30 text-5xl font-extrabold text-[#6e0f23] mb-6 tracking-tight"
+            className="relative text-5xl font-extrabold text-[#6e0f23] mb-4 tracking-tight"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -72,7 +74,7 @@ const Login = () => {
             Your Stories, Your Voice
           </motion.h1>
           <motion.p
-            className="relative z-30 text-lg text-[#6e0f23]/95 max-w-sm leading-relaxed"
+            className="relative z-30 text-lg text-[#6e0f23]/95 max-w-sm mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
@@ -83,9 +85,9 @@ const Login = () => {
       </div>
 
       {/* Right Section - Login Form */}
-      <div className="flex items-center justify-center bg-white md:bg-transparent px-6 py-8 min-h-screen">
+      <div className="flex items-center justify-center bg-white dark:bg-gray-900 md:bg-transparent  px-6 pb-8 pt-24 min-h-screen">
         <motion.div
-          className="w-full max-w-md p-10 rounded-3xl shadow-2xl backdrop-blur-lg bg-white/80 border border-[#f0c987] transition-transform duration-300 ease-in-out hover:scale-[1.03]"
+          className="w-full max-w-md p-10 rounded-3xl shadow-2xl backdrop-blur-lg bg-white/80 border  dark:bg-gray-800/80 border-gray-500 transition-transform duration-300 ease-in-out hover:scale-[1.03]"
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
@@ -94,7 +96,11 @@ const Login = () => {
             Welcome Back
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-7" noValidate>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-5 "
+            noValidate
+          >
             {/* Email */}
             <div>
               <label
@@ -111,7 +117,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="w-full px-5 py-3 rounded-lg border border-[#db7c26] text-[#e3637a] placeholder-[#a05a29] focus:outline-none focus:ring-2 focus:ring-[#c32f27] focus:border-[#c32f27] transition"
+                className="w-full px-5 py-3 rounded-lg border border-gray-400 text-[#e3637a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#c32f27] focus:border-[#e3637a] transition"
               />
             </div>
 
@@ -131,30 +137,32 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
-                className="w-full px-5 py-3 rounded-lg border border-[#db7c26] text-[#e3637a] placeholder-[#a05a29] focus:outline-none focus:ring-2 focus:ring-[#c32f27] focus:border-[#c32f27] transition"
+                className="w-full px-5 py-3 rounded-lg border border-gray-400 text-[#e3637a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#c32f27] focus:border-[#e3637a] transition"
               />
             </div>
 
             {/* Login Button */}
-            <button
-              type="submit"
-              className="w-full bg-[#c32f27] text-[#f7b538] py-3 rounded-lg font-bold shadow-md hover:shadow-lg hover:scale-[1.04] transition transform"
-            >
-              Log In
-            </button>
+            {/* Buttons grouped together */}
+            <div className="flex flex-col gap-3 pt-2">
+              <button
+                type="submit"
+                className="w-full bg-[#e3637a] text-white py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition"
+              >
+                Log In
+              </button>
 
-            {/* Google Sign-In */}
-            <button
-              type="button"
-              onClick={handleGoogleSignIn}
-              className="w-full mt-3 border border-[#c32f27] text-[#e3637a] bg-white flex items-center justify-center py-3 rounded-lg font-bold shadow-sm hover:shadow-md hover:scale-[1.04] transition transform"
-            >
-              <FcGoogle size="1.5em" className="mr-2" />
-              Sign in with Google
-            </button>
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                className="w-full border border-[#e3637a] text-[#e3637a] bg-white flex items-center justify-center py-3 rounded-lg font-bold shadow-sm hover:shadow-md transition"
+              >
+                <FcGoogle size="1.5em" className="mr-2" />
+                Sign in with Google
+              </button>
+            </div>
 
-            {/* Signup Link */}
-            <p className="text-[#e3637a] font-semibold text-sm text-center mt-6">
+            {/* Signup link */}
+            <p className="text-[#e3637a] font-semibold text-sm text-center">
               Don&apos;t have an account?{" "}
               <Link
                 to="/signup"

@@ -32,7 +32,7 @@ const Newsletter = () => {
 
   return (
     <motion.section
-      className=" dark:bg-transparent py-12 px-6 text-center rounded-lg shadow-md max-w-3xl mx-auto"
+      className="bg-gray-100 dark:bg-gray-900 py-12 px-6 text-center rounded-lg shadow-md max-w-3xl mx-auto"
       initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
