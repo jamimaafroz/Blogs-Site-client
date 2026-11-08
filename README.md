@@ -7,7 +7,7 @@ It’s designed to be recruiter-friendly with clean UI, modern features, and opt
 ---
 
 ## 🌐 Live Site
-🔗 **Live Link:** [https://jazzy-kangaroo-66202e.netlify.app/]
+🔗 **Live Link:** [https://web-blog-new.netlify.app/]
 
 ---
 
