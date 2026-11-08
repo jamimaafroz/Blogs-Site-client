@@ -66,7 +66,7 @@ It’s designed to be recruiter-friendly with clean UI, modern features, and opt
 
 ## 📸 Screenshots
 ### Home Page
-![Home Page Screenshot](https://i.ibb.co/cK13JdFR/Screenshot-2025-08-08-003504.png)
+![Home Page Screenshot](https://i.ibb.co.com/rGW0Gkhk/screencapture-1794161166961.png)
 
 
 
