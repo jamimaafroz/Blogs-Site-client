@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   FaPenFancy,
@@ -11,144 +11,105 @@ import {
 
 const aboutPoints = [
   {
-    icon: <FaPenFancy className="text-4xl text-[#d8572a]" />,
+    Icon: FaPenFancy,
     title: "Passionate Writing",
     desc: "We believe every story deserves to be told with passion and authenticity.",
   },
   {
-    icon: <FaGlobeAmericas className="text-4xl text-[#d8572a]" />,
+    Icon: FaGlobeAmericas,
     title: "Global Reach",
     desc: "Connecting writers and readers across cultures and continents.",
   },
   {
-    icon: <FaHandsHelping className="text-4xl text-[#d8572a]" />,
+    Icon: FaHandsHelping,
     title: "Supportive Community",
     desc: "A safe space where ideas flourish and support is always available.",
   },
   {
-    icon: <FaLightbulb className="text-4xl text-[#d8572a]" />,
+    Icon: FaLightbulb,
     title: "Innovative Features",
     desc: "Cutting-edge tools to enhance your writing and reading experience.",
   },
   {
-    icon: <FaUsers className="text-4xl text-[#d8572a]" />,
+    Icon: FaUsers,
     title: "Collaborative Network",
     desc: "Engage with fellow creators and expand your creative horizons.",
   },
   {
-    icon: <FaShieldAlt className="text-4xl text-[#d8572a]" />,
+    Icon: FaShieldAlt,
     title: "Secure & Reliable",
     desc: "Your data and content are protected with industry-standard security.",
   },
 ];
 
 const AboutSection = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef(null);
-
-  // Card width + margin (w-72 = 18rem = 288px + 32px gap)
-  const CARD_WIDTH = 288 + 32; // px
-
-  // Scroll to specific card on dot click
-  const scrollToIndex = (index) => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({
-        left: index * CARD_WIDTH,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  // Update active dot on scroll
-  const handleScroll = () => {
-    if (containerRef.current) {
-      const scrollLeft = containerRef.current.scrollLeft;
-      const index = Math.round(scrollLeft / CARD_WIDTH);
-      setActiveIndex(index);
-    }
-  };
-
-  // Add throttling/debounce if needed for performance in large scale
-
   return (
-    <section className="relative bg-gradient-to-r from-[#fff1e6] via-[#ffd6c2] to-[#fff7f0] py-20 px-4 overflow-x-hidden">
-      <div className="max-w-7xl mx-auto text-center">
-        <motion.h2
-          className="text-4xl font-extrabold mb-10 text-[#e3637a]"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          About Us
-        </motion.h2>
+    <section
+      className="relative overflow-hidden px-4 py-20 sm:px-6"
+      aria-label="About us"
+    >
+      {/* Animated background circles */}
+      <motion.div
+        className="pointer-events-none absolute left-8 top-12 h-40 w-40 rounded-full bg-[#d8572a]/15 blur-3xl sm:left-16 sm:h-52 sm:w-52"
+        animate={{ x: [0, 30, -20, 0], y: [0, -25, 15, 0] }}
+        transition={{ repeat: Infinity, duration: 20, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="pointer-events-none absolute bottom-12 right-8 h-52 w-52 rounded-full bg-[#e3637a]/20 blur-3xl sm:right-16 sm:h-72 sm:w-72"
+        animate={{ x: [0, -35, 25, 0], y: [0, 20, -25, 0] }}
+        transition={{ repeat: Infinity, duration: 24, ease: "easeInOut" }}
+      />
 
-        <motion.p
-          className="max-w-3xl mx-auto text-black mb-16 text-lg leading-relaxed"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          We are a dynamic platform committed to empowering writers and
-          inspiring readers globally. Our mission is to provide innovative
-          tools, foster community collaboration, and ensure a secure environment
-          for creative expression. Join us to elevate your storytelling journey.
-        </motion.p>
+      <div className="pointer-events-none absolute bottom-0 left-1/2 ..." />
 
-        {/* Horizontal scroll container */}
-        <div
-          ref={containerRef}
-          onScroll={handleScroll}
-          className="flex space-x-8 overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scrollbar"
-          style={{ WebkitOverflowScrolling: "touch" }}
+      <div className="relative mx-auto max-w-6xl">
+        {/* Header */}
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          {aboutPoints.map((point, idx) => (
+          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#e3637a]">
+            About Us
+          </span>
+          <h2 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+            A home for <span className="text-[#e3637a]">every story.</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-gray-600 dark:text-gray-400">
+            We are a platform committed to empowering writers and inspiring
+            readers globally, with innovative tools, a collaborative community
+            and a secure space for creative expression.
+          </p>
+        </motion.div>
+
+        {/* Points */}
+        <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          {aboutPoints.map(({ Icon, title, desc }, index) => (
             <motion.div
-              key={idx}
-              className="snap-start flex-shrink-0 w-72 bg-white rounded-xl shadow-lg p-8 flex flex-col items-center text-center hover:shadow-2xl transition-shadow duration-400 cursor-default"
+              key={title}
+              className="group border-t border-gray-200 pt-6 dark:border-gray-800"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: idx * 0.15 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: (index % 3) * 0.12 }}
             >
-              <div className="mb-6">{point.icon}</div>
-              <h3 className="text-xl font-semibold mb-3 text-[#d8572a] tracking-wide">
-                {point.title}
+              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#e3637a]/10 text-[#e3637a] transition-all duration-300 group-hover:bg-[#e3637a] group-hover:text-white">
+                <Icon size={18} />
+              </span>
+
+              <h3 className="mt-5 font-heading text-xl font-bold text-gray-900 dark:text-white">
+                {title}
               </h3>
-              <p className="text-gray-600 leading-relaxed">{point.desc}</p>
+
+              <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                {desc}
+              </p>
             </motion.div>
           ))}
         </div>
-
-        {/* Pagination dots */}
-        <div className="flex justify-center mt-8 space-x-4">
-          {aboutPoints.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => scrollToIndex(idx)}
-              className={`w-4 h-4 rounded-full transition-colors duration-300 ${
-                idx === activeIndex
-                  ? "bg-[#d8572a]"
-                  : "bg-[#d8572a]/40 hover:bg-[#f7ac91]/70"
-              }`}
-              aria-label={`Scroll to card ${idx + 1}`}
-            />
-          ))}
-        </div>
       </div>
-
-      {/* Subtle Animated Background Circles */}
-      <motion.div
-        className="absolute top-12 left-12 w-32 h-32 bg-[#d8572a] opacity-10 rounded-full blur-3xl"
-        animate={{ x: [0, 15, -10, 0], y: [0, -15, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 20 }}
-      />
-      <motion.div
-        className="absolute bottom-12 right-12 w-48 h-48 bg-[#e3637a] opacity-10 rounded-full blur-4xl"
-        animate={{ x: [0, -20, 15, 0], y: [0, 10, -15, 0] }}
-        transition={{ repeat: Infinity, duration: 24 }}
-      />
     </section>
   );
 };

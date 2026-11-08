@@ -45,7 +45,7 @@ const socials = [
 
 const Footer = () => {
   return (
-    <footer className="relative mt-16 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <footer className="relative bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
       {/* Gradient accent line */}
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#d8572a] via-[#e3637a] to-[#c32f27]" />
 

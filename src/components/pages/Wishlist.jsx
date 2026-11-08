@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FiHeart, FiInfo, FiTrash2 } from "react-icons/fi";
+import { FiArrowRight, FiHeart, FiTrash2 } from "react-icons/fi";
+import { motion } from "framer-motion";
 import axios from "axios";
 import { AuthContext } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router";
@@ -73,106 +74,119 @@ const Wishlist = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <svg
-          className="animate-spin h-12 w-12 text-[#c32f27]"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          aria-label="Loading spinner"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          />
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-          />
-        </svg>
+      <div className="flex h-64 items-center justify-center">
+        <div
+          className="h-12 w-12 animate-spin rounded-full border-4 border-[#e3637a]/20 border-t-[#e3637a]"
+          aria-label="Loading wishlist"
+        />
       </div>
     );
   }
 
   if (!wishlist.length) {
     return (
-      <div className="text-center mt-16 text-gray-600 text-xl font-medium">
-        Your wishlist is currently empty.
-      </div>
+      <section className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-6 text-center">
+        <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e3637a]/10 text-[#e3637a]">
+          <FiHeart size={28} />
+        </span>
+        <h1 className="mt-6 font-heading text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+          Your wishlist is <span className="text-[#e3637a]">empty.</span>
+        </h1>
+        <p className="mt-3 text-gray-600 dark:text-gray-400">
+          Save blogs you love and they'll show up here.
+        </p>
+        <button
+          onClick={() => navigate("/Blogs")}
+          className="group mt-8 inline-flex items-center gap-2 rounded-full bg-[#e3637a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#d8572a]"
+        >
+          Browse blogs
+          <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+        </button>
+      </section>
     );
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-12">
-      <header className="flex flex-col items-center justify-center mb-8 space-y-4 text-center max-w-3xl mx-auto">
-        <div className="flex items-center space-x-3">
-          <FiHeart size={36} className="text-[#c32f27]" aria-hidden="true" />
-          <h1 className="text-4xl font-extrabold text-[#e3637a]">
-            My Wishlist
-          </h1>
-        </div>
-        <p className="text-gray-700 text-lg">
-          Keep track of your favorite blogs all in one place. Your wishlist lets
-          you easily revisit inspiring posts, discover fresh perspectives, and
-          manage content that matters most to you. Stay organized and never miss
-          out on what sparks your creativity!
+    <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      {/* Header */}
+      <motion.header
+        className="text-center"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+      >
+        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#e3637a]">
+          Saved
+        </span>
+        <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+          My <span className="text-[#e3637a]">wishlist.</span>
+        </h1>
+        <p className="mx-auto mt-4 max-w-md text-gray-600 dark:text-gray-400">
+          {wishlist.length} {wishlist.length === 1 ? "blog" : "blogs"} saved for
+          later.
         </p>
-      </header>
+      </motion.header>
 
+      {/* Grid */}
       <section
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+        className="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4"
         aria-label="Wishlist blogs"
       >
-        {wishlist.map(({ _id, blogData, blogId }) => (
-          <article
+        {wishlist.map(({ _id, blogData, blogId }, idx) => (
+          <motion.article
             key={_id}
-            className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden"
+            className="group"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: (idx % 4) * 0.08 }}
           >
-            <img
-              src={blogData?.image}
-              alt={`Cover image for ${blogData?.title}`}
-              className="w-full h-36 object-cover hover:scale-105 transition-transform duration-300"
-              loading="lazy"
-            />
-            <div className="p-4 flex flex-col flex-grow">
+            {/* Image */}
+            <div className="relative overflow-hidden rounded-2xl">
+              <img
+                src={blogData?.image}
+                alt={`Cover image for ${blogData?.title}`}
+                loading="lazy"
+                onClick={() => handleDetails(blogId)}
+                className="aspect-[4/3] w-full cursor-pointer object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+
+              <button
+                onClick={() => handleRemove(_id)}
+                aria-label={`Remove ${blogData?.title} from wishlist`}
+                title="Remove"
+                className="absolute right-3 top-3 rounded-full bg-white/90 p-2 text-gray-600 backdrop-blur transition hover:bg-red-500 hover:text-white dark:bg-gray-900/80 dark:text-gray-300 dark:hover:bg-red-500 dark:hover:text-white"
+              >
+                <FiTrash2 size={16} />
+              </button>
+            </div>
+
+            {/* Text, no box */}
+            <div className="mt-4">
+              <span className="text-xs font-semibold uppercase tracking-widest text-[#e3637a]">
+                {blogData?.category}
+              </span>
+
               <h2
-                className="text-lg font-semibold text-[#e3637a] truncate mb-1"
                 title={blogData?.title}
+                className="mt-2 line-clamp-2 font-heading text-xl font-bold leading-snug text-gray-900 transition-colors group-hover:text-[#e3637a] dark:text-white"
               >
                 {blogData?.title}
               </h2>
-              <p className="text-xs font-medium text-[#c32f27] mb-2">
-                {blogData?.category}
-              </p>
-              <p className="text-gray-600 flex-grow text-sm">
+
+              <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
                 {blogData?.shortDesc}
               </p>
 
-              <div className="mt-4 flex justify-between gap-3 flex-wrap">
-                <button
-                  onClick={() => handleDetails(blogId)}
-                  className="flex items-center gap-2 text-[#1D4ED8] hover:text-[#2563EB] font-medium text-xs focus:outline-none focus:ring-2 focus:ring-[#1D4ED8] rounded"
-                  aria-label={`View details of ${blogData?.title}`}
-                >
-                  <FiInfo size={16} />
-                  Details
-                </button>
-                <button
-                  onClick={() => handleRemove(_id)}
-                  className="flex items-center gap-2 text-[#dc2626] hover:text-[#b91c1c] font-medium text-xs focus:outline-none focus:ring-2 focus:ring-[#dc2626] rounded"
-                  aria-label={`Remove ${blogData?.title} from wishlist`}
-                >
-                  <FiTrash2 size={16} />
-                  Remove
-                </button>
-              </div>
+              <button
+                onClick={() => handleDetails(blogId)}
+                aria-label={`View details of ${blogData?.title}`}
+                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 transition-colors group-hover:text-[#e3637a] dark:text-gray-100"
+              >
+                Read more
+                <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+              </button>
             </div>
-          </article>
+          </motion.article>
         ))}
       </section>
     </main>

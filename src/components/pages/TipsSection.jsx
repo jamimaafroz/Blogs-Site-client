@@ -1,20 +1,20 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaPenNib, FaLightbulb, FaFeatherAlt, FaMagic } from "react-icons/fa";
+import { FaPenNib, FaLightbulb, FaFeatherAlt } from "react-icons/fa";
 
 const tips = [
   {
-    icon: <FaPenNib className="text-3xl text-[#d8572a]" />,
+    icon: FaPenNib,
     title: "Write What You Love",
     desc: "Your passion brings authenticity. Start with topics that excite you most.",
   },
   {
-    icon: <FaLightbulb className="text-3xl text-[#d8572a]" />,
+    icon: FaLightbulb,
     title: "Be Clear & Concise",
     desc: "Keep your writing simple and focused. Readers value clarity over complexity.",
   },
   {
-    icon: <FaFeatherAlt className="text-3xl text-[#d8572a]" />,
+    icon: FaFeatherAlt,
     title: "Inspire Through Stories",
     desc: "Engage your audience by weaving stories from personal experiences.",
   },
@@ -22,61 +22,61 @@ const tips = [
 
 const TipsSection = () => {
   return (
-    <div className="relative overflow-hidden py-16 bg-gradient-to-br from-[#fff7f0] via-[#ffe1d6] to-[#ffffff]">
-      <div className="container mx-auto px-4 text-center">
-        <motion.h2
-          className="text-4xl font-bold mb-6 text-[#e3637a] flex items-center justify-center gap-2"
+    <section
+      className="relative overflow-hidden px-4 py-30 sm:px-6"
+      aria-label="Writing tips"
+    >
+      <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-[40rem] max-w-full -translate-x-1/2 rounded-full bg-gradient-to-r from-[#d8572a]/15 via-[#e3637a]/15 to-[#f7ac91]/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-6xl">
+        {/* Header */}
+        <motion.div
+          className="text-center"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <FaMagic className="text-[#d8572a]" />
-          Writing Tips & Inspiration
-        </motion.h2>
+          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#e3637a]">
+            Writing Tips
+          </span>
+          <h2 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+            Write with <span className="text-[#e3637a]">purpose.</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-gray-600 dark:text-gray-400">
+            Quick tips to elevate your content and grow your blogging journey.
+          </p>
+        </motion.div>
 
-        <motion.p
-          className="text-gray-600 mb-12 max-w-2xl mx-auto"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          Boost your blogging journey with these quick and effective writing
-          tips designed to elevate your content.
-        </motion.p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {tips.map((tip, index) => (
+        {/* Tips: open columns, no cards */}
+        <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-3">
+          {tips.map(({ icon: Icon, title, desc }, index) => (
             <motion.div
-              key={index}
-              className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300"
+              key={title}
+              className="group text-center md:text-left"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: index * 0.15 }}
             >
-              <div className="mb-4">{tip.icon}</div>
-              <h3 className="text-xl font-semibold mb-2 text-[#d8572a]">
-                {tip.title}
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#d8572a] to-[#e3637a] text-white shadow-lg shadow-[#e3637a]/20 transition-transform duration-300 group-hover:-translate-y-1">
+                <Icon size={20} />
+              </span>
+
+              <h3 className="mt-5 font-heading text-xl font-bold text-gray-900 dark:text-white">
+                {title}
               </h3>
-              <p className="text-gray-600">{tip.desc}</p>
+
+              <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                {desc}
+              </p>
+
+              <div className="mx-auto mt-5 h-0.5 w-10 rounded-full bg-gradient-to-r from-[#d8572a] to-[#e3637a] transition-all duration-300 group-hover:w-20 md:mx-0" />
             </motion.div>
           ))}
         </div>
       </div>
-
-      {/* Animated Background Circles */}
-      <motion.div
-        className="absolute top-0 left-0 w-48 h-48 bg-[#d8572a] opacity-10 rounded-full blur-2xl"
-        animate={{ x: [0, 50, -30, 0], y: [0, -40, 20, 0] }}
-        transition={{ repeat: Infinity, duration: 12 }}
-      />
-      <motion.div
-        className="absolute bottom-0 right-0 w-64 h-64 bg-[#e3637a] opacity-10 rounded-full blur-3xl"
-        animate={{ x: [0, -60, 40, 0], y: [0, 30, -30, 0] }}
-        transition={{ repeat: Infinity, duration: 14 }}
-      />
-    </div>
+    </section>
   );
 };
 

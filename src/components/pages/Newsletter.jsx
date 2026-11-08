@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
+import { FiArrowRight } from "react-icons/fi";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
@@ -31,66 +32,79 @@ const Newsletter = () => {
   };
 
   return (
-    <motion.section
-      className="bg-gray-100 dark:bg-gray-900 py-12 px-6 text-center rounded-lg shadow-md max-w-3xl mx-auto"
-      initial={{ opacity: 0, y: 60 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
+    <section
+      className="relative overflow-hidden px-4 py-20 sm:px-6"
       aria-label="Newsletter subscription section"
     >
-      <Toaster position="top-center" />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: { borderRadius: "12px", background: "#1f2937", color: "#fff" },
+        }}
+      />
 
-      <motion.h2
-        className="text-3xl font-extrabold mb-4 text-[#e3637a]"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-      >
-        Subscribe to Our Newsletter
-      </motion.h2>
+      {/* Soft background glow */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-[36rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#e3637a]/10 blur-3xl" />
 
-      <motion.p
-        className="text-gray-600 mb-6 max-w-lg mx-auto"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
+      <motion.div
+        className="relative mx-auto max-w-2xl text-center"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        Stay updated with the latest blog posts, tips, and insights delivered
-        directly to your inbox.
-      </motion.p>
+        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-[#e3637a]">
+          Newsletter
+        </span>
 
-      <motion.form
-        onSubmit={handleSubscribe}
-        className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto"
-        noValidate
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7, duration: 0.6 }}
-      >
-        <motion.input
-          type="email"
-          placeholder="Enter your email address"
-          className="p-3 w-full sm:w-80 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#e3637a] transition"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          aria-label="Email address"
-          disabled={isSubmitting}
-          required
-          whileFocus={{ scale: 1.03, borderColor: "#e3637a" }}
-          transition={{ type: "spring", stiffness: 300 }}
-        />
-        <motion.button
-          whileHover={{ scale: 1.07, backgroundColor: "#e3637a" }}
-          whileTap={{ scale: 0.95 }}
-          type="submit"
-          className={`bg-[#d8572a] text-white px-6 py-3 rounded-md font-semibold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed`}
-          disabled={isSubmitting}
-          aria-live="polite"
+        <h2 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+          Stories worth <span className="text-[#e3637a]">your inbox.</span>
+        </h2>
+
+        <p className="mx-auto mt-4 max-w-md text-gray-600 dark:text-gray-400">
+          One short email a week with fresh blogs, writing tips and ideas. No
+          noise.
+        </p>
+
+        <form
+          onSubmit={handleSubscribe}
+          noValidate
+          className="mx-auto mt-8 max-w-md"
         >
-          {isSubmitting ? "Subscribing..." : "Subscribe"}
-        </motion.button>
-      </motion.form>
-    </motion.section>
+          <div className="flex items-center gap-2 rounded-full border border-gray-300 bg-white p-1.5 transition focus-within:border-[#e3637a] focus-within:ring-4 focus-within:ring-[#e3637a]/10 dark:border-gray-700 dark:bg-gray-800">
+            <input
+              type="email"
+              placeholder="you@example.com"
+              className="min-w-0 flex-1 bg-transparent px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:outline-none dark:text-white"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              aria-label="Email address"
+              disabled={isSubmitting}
+              required
+            />
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              aria-live="polite"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-[#e3637a] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#d8572a] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSubmitting ? (
+                "Subscribing..."
+              ) : (
+                <>
+                  Subscribe
+                  <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+
+        <p className="mt-4 text-xs text-gray-500 dark:text-gray-500">
+          Unsubscribe anytime.
+        </p>
+      </motion.div>
+    </section>
   );
 };
 
